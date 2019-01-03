@@ -35,6 +35,7 @@ import math
 from MCP3008 import MCP3008
 #
 
+#Imports LCD
 
 #ESTOS SON LOS QUE HABRIA QUE ASIGNAR A LOS VALORES GLOBALES
 #         print ("Temperature : ", temperature, "C")
