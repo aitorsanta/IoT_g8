@@ -1,8 +1,19 @@
 '''
 Created on 27 dic. 2018
 
-@author: Xabier
+@author: G8
 '''
+
+'''
+SALIDAS DE LA RASPBERRY-PI:
+Buzzer: pin 17.
+P. atmosferica: pin 5.
+Luz: pin 26.
+Humedad: pin 18.
+LCD: pin 23.
+Gas: pin 25.
+'''
+
 #Imports buzzer
 from gpiozero import Buzzer
 from time import sleep
