@@ -45,7 +45,7 @@ import time
 import math
 from MCP3008 import MCP3008
 #
-
+#Prueba commit
 #Imports LCD
 
 #ESTOS SON LOS QUE HABRIA QUE ASIGNAR A LOS VALORES GLOBALES
