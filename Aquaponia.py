@@ -494,13 +494,43 @@ def humedad():
 #LCD
 
 def main():
+    warning=0
+    critico=0
+    a=[]
+    d=[]
+    
+    
+    alertaTemp=0 #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
+    alertaPresion=0
+    alertaHumedad=0
+    
+    alertaLuz=0 #SENSOR DE LUZ
+    
+    alertaGas=0 #SENSOR DE GAS
+    
+    alertaTempRaiz=0 #SENSOR TEMPERATURA RAICES/TIERRA
+    
+    alertaHumedadRaiz=0
+    
+    
+    
     while True:
         #buzzer() SERIA ACTUADOR        
         #lcd() ACTUADOR
         
+        #inicializar estos valores por si hay lectura errornea o lo que sea (pruebas)
+        warning=0
+        critico=0
+        
+        #Alertas personalizadas
+        
+        
+        
         #Variables que seran sustituidos por valores de comparacion reales o los que tienen que ser
         
         #VALORES ADECUADOS
+        
+        #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
         p=0 #valor de temperatura
         q=0 #valor de presion
         r=0 #valor de humedad
@@ -523,7 +553,6 @@ def main():
         
         
         #PRESION ATMOSFERICA
-        a=[]
         a=patmosferica()
         
         #a[0] temperatura
@@ -533,16 +562,24 @@ def main():
         if a[0]>=p:
             True
         else:
-            False
+            alertaTemp+=1
+            setText("Temperatura baja")
+            warning+=1
+            time.sleep(2)
         if a[1]>=q:
             True
         else:
-            False
+            alertaPresion+=1
+            setText("Presion atmosferica inestable")
+            warning+=1
+            time.sleep(2)
         if a[2]>=r:
             True
         else:
-            False
-            
+            alertaHumedad+=1
+            setText("Poca humedad")
+            warning+=1
+            time.sleep(2)
             
             
         #LUZ DE LA PLANTA
@@ -551,7 +588,11 @@ def main():
         if b>=s:
             True
         else:
-            False
+            alertaLuz+=1
+            setText("Falta de luz")
+            warning+=1
+            time.sleep(2)
+        
         
         #GASES EN EL AMBIENTE DE LA PLANTA
         c=gas()
@@ -559,20 +600,80 @@ def main():
         if c>=t:
             True
         else:
-            False
-        
+            alertaGas+=1
+            setText("Poco oxigeno")
+            warning+=1
+            time.sleep(2)
+            
+            
         #HUMEDAD EN LAS RAICES
-        d=[]
         d=humedad()
         
         if d[0]>=u:
             True
         else:
-            False
+            alertaTempRaiz+=1
+            setText("Raices frias")
+            warning+=1
+            time.sleep(2)
             
         if d[1]>=v:
             True
         else:
-            False
+            alertaHumedadRaiz+=1
+            setText("Raices secas")
+            warning+=1
+            time.sleep(2)
 
+
+        #
+        #Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que enseñe un error critico y buzeer para saber si funciona bien todo
+        #
+        #SISTEMA DE VALORES
+        #
+        #Bien
+        #Warning
+        #Critico
+        #
+        #Cada warning que haya oscurecera el color del lcd, tres warnings indicarian un error critico, por cada warning una alerta sonora corta
+        #
+        if critico >= 0:
+            setText("Error critico")
+            setRGB(255, 0, 0)
+        elif warning>=3:
+            setRGB(199, 92, 52)
+            setText("Demasiadas alertas")
+            time.sleep(8)
+            critico+=1
+        elif warning == 2:
+            setText("Dos alertas, revisa el sistema")
+            setRGB(251, 150, 96)# Rosa
+        elif warning == 1:
+            setText("Una alerta, revisa el sistema")
+            setRGB(254, 185, 58)# Amarillo
+        elif warning == 0:
+            setRGB(0, 255, 0)
+        
+        #         setText("Hello world, this is a test")
+        #         setRGB(0,128,64)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
