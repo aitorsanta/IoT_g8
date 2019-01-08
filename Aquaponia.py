@@ -26,10 +26,9 @@ from ctypes import c_byte
 from ctypes import c_ubyte
 #
 #Imports Luz
-import math
-import sys
-import time
-from grove.adc import ADC
+import spidev # To communicate with SPI devices
+from time import sleep  
+from sys import argv, exit
 #
 
 # Imports Humedad
@@ -144,7 +143,7 @@ def create_char(location, pattern):
 #                 setRGB(0,255,0)
 #         setText("Bye bye, this should wrap onto next line")
 
-#Buzzer
+#Buzzer PROBADO OK
 def buzzer():
 
     buzzer = Buzzer(16)
@@ -157,7 +156,7 @@ def buzzer():
         cont+=1
 
     True
-#P.atmosferica
+#P.atmosferica PROBADO OK
 def patmosferica(): 
     DEVICE = 0x77 # Default device I2C address
     
@@ -306,43 +305,40 @@ def patmosferica():
             main()
     
             
-#Luz
+#Luz PROBADO OK
 def luz():
-    class GroveLightSensor:
+# Start SPI connection
+spi = spidev.SpiDev()
+spi.open(0,0)   
 
-        def __init__(self, channel):
-            self.channel = channel
-            self.adc = ADC()
+# Read MCP3008 data
+def analogInput(channel):
+    if ((channel > 7) or (channel < 0)):
+        return -1
+    spi.max_speed_hz = 1350000
+    adc = spi.xfer2([1,(8+channel)<<4,0])
+    data = ((adc[1]&3) << 8) + adc[2]
+    return data
 
-            @property
-            def light(self):
-                value = self.adc.read(self.channel)
-                return value
-
-    Grove = GroveLightSensor
-
-
-    def main():
-        if len(sys.argv) < 2:
-            print('Usage: {} adc_channel'.format(sys.argv[0]))
-            sys.exit(1)
-
-        sensor = GroveLightSensor(int(sys.argv[1]))
-
-        print('Detecting light...')
+def main():
+    try:
         while True:
-            print('Light value: {0}'.format(sensor.light))
-            time.sleep(1)
+            output = analogInput(int(argv[1])) # Reading from CH0
+            print(output)
+            sleep(0.2)
+    except IndexError:
+        print("please, introduce the ADC chanel in which you want to read from.")
+        exit(0)
 
-    if __name__ == '__main__':
-        main()
+if __name__== "__main__":
+    main()
 
 
 
 #Gas
 def gas():
     ''' Hemen dago kalibratzeko kodea :D
-    Enough of the theory – we want to use the sensor now. For this purpose you can use the code I have customized, which is located in a GitHub repository. Also included is a class for reading the MCP3008. First we clone the directory:
+    Enough of the theory â€“ we want to use the sensor now. For this purpose you can use the code I have customized, which is located in a GitHub repository. Also included is a class for reading the MCP3008. First we clone the directory:
 git clone https://github.com/tutRPi/Raspberry-Pi-Gas-Sensor-MQ
     Then we change to the directory and run the existing Python test file.
 cd Raspberry-Pi-Gas-Sensor-MQ
@@ -627,7 +623,7 @@ def main():
 
 
         #
-        #Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que ense�e un error critico y buzeer para saber si funciona bien todo
+        #Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que enseñe un error critico y buzeer para saber si funciona bien todo
         #
         #SISTEMA DE VALORES
         #
