@@ -21,9 +21,8 @@ from sys import argv, exit
 #
 
 # Imports Humedad
-import sys
-import Adafruit_DHT
-from RPLCD import CharLCD
+import RPi.GPIO as GPIO
+import time
 
 lcd = CharLCD(cols=16, rows=2, pin_rs=37, pin_e=35, pins_data=[33, 31, 29, 23])
 #
@@ -348,13 +347,23 @@ def gas():
 
 #Humedad
 def humedad():
+    channel = 21
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(channel, GPIO.IN)
+     
+    def callback(channel):
+            if GPIO.input(channel):
+                    print "no Water Detected!"
+            else:
+                    print "hay"
+     
+    GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)  # let us know when the pin goes HIGH or LOW
+    GPIO.add_event_callback(channel, callback)  # assign function to GPIO PIN, Run function on change
+     
+    # infinite loop
     while True:
-    humidity, temperature = Adafruit_DHT.read_retry(11, 4)
+        time.sleep(1)
 
-    lcd.cursor_pos = (0, 0)
-    lcd.write_string("Temp: %d C" % temperature)
-    lcd.cursor_pos = (1, 0)
-    lcd.write_string("Humidity: %d %%" % humidity)
 
 
 #LCD
