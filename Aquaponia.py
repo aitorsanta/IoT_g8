@@ -38,6 +38,7 @@ import smbus
 import RPi.GPIO as GPIO
 #
 
+
 #ESTOS SON LOS QUE HABRIA QUE ASIGNAR A LOS VALORES GLOBALES
 #         print ("Temperature : ", temperature, "C")
 #         print ("Pressure : ", pressure, "hPa")
@@ -307,7 +308,7 @@ def analogInput(channel):
     data = ((adc[1]&3) << 8) + adc[2]
     return data
 
-def main():
+def mainn():
     try:
         while True:
             output = analogInput(int(argv[1])) # Reading from CH0
@@ -318,7 +319,7 @@ def main():
         exit(0)
 
 if __name__== "__main__":
-    main()
+    mainn()
 
 
 
@@ -369,6 +370,7 @@ def humedad():
 #LCD
 
 def main():
+    start = time.time()
     warning=0
     critico=0
     a=[]
@@ -427,79 +429,102 @@ def main():
         z=0 #valor auxiliar
         
         
+        end = time.time()
+        diff=round(end-start)
+#         print(round(end - start))
+   
+        
         #PRESION ATMOSFERICA
-        a=patmosferica()
-        
-        #a[0] temperatura
-        #a[1] presion
-        #a[2] humedad
-        
-        if a[0]>=p:
-            True
-        else:
-            alertaTemp+=1
-            setText("Temperatura baja")
-            warning+=1
-            time.sleep(2)
-        if a[1]>=q:
-            True
-        else:
-            alertaPresion+=1
-            setText("Presion atmosferica inestable")
-            warning+=1
-            time.sleep(2)
-        if a[2]>=r:
-            True
-        else:
-            alertaHumedad+=1
-            setText("Poca humedad")
-            warning+=1
-            time.sleep(2)
-            
-            
-        #LUZ DE LA PLANTA
-        b=luz()
-        
-        if b>=s:
-            True
-        else:
-            alertaLuz+=1
-            setText("Falta de luz")
-            warning+=1
-            time.sleep(2)
-        
-        
+        try:
+            a=patmosferica()
+        except:
+            setText("Error lectura P.atmosferica")
+            critico+=1
+            time.sleep(1)
+        #LUZ DE LA PLANTA 
+        try:
+            b=luz()
+        except:
+            setText("Error lectura de luz")
+            critico+=1
+            time.sleep(1)       
         #GASES EN EL AMBIENTE DE LA PLANTA
-        c=gas()
-        
-        if c>=t:
-            True
-        else:
-            alertaGas+=1
-            setText("Poco oxigeno")
-            warning+=1
-            time.sleep(2)
-            
-            
+        try:
+            c=gas()
+        except:
+            setText("Error lectura de gas")
+            critico+=1
+            time.sleep(1)   
         #HUMEDAD EN LAS RAICES
-        d=humedad()
-        
-        if d[0]>=u:
-            True
-        else:
-            alertaTempRaiz+=1
-            setText("Raices frias")
-            warning+=1
-            time.sleep(2)
-            
-        if d[1]>=v:
-            True
-        else:
-            alertaHumedadRaiz+=1
-            setText("Raices secas")
-            warning+=1
-            time.sleep(2)
-
+        try:
+            d=humedad()
+        except:
+            setText("Error lectura de humedad")
+            critico+=1
+            time.sleep(1)              
+        #Habria que ver como funcionan estas condiciones
+        if diff%10=0 or diff%10=1 or diff%10=9:            
+            if a[0]>=p:
+                True
+            else:
+                alertaTemp+=1
+                setText("Temperatura baja")
+                setRGB(254, 185, 58)
+                warning+=1
+                time.sleep(1)
+            if a[1]>=q:
+                True
+            else:
+                alertaPresion+=1
+                setText("Presion atmosferica inestable")
+                setRGB(254, 185, 58)
+                warning+=1
+                time.sleep(1)
+            if a[2]>=r:
+                True
+            else:
+                alertaHumedad+=1
+                setText("Poca humedad")
+                setRGB(254, 185, 58)
+                warning+=1
+                time.sleep(1)
+        #LUZ DE LA PLANTA
+            if b>=s:
+                True
+            else:
+                alertaLuz+=1
+                setText("Falta de luz")
+                setRGB(254, 185, 58)
+                warning+=1
+                time.sleep(1)
+        #GASES EN EL AMBIENTE DE LA PLANTA
+            if c>=t:
+                True
+            else:
+                alertaGas+=1
+                setText("Poco oxigeno")
+                setRGB(254, 185, 58)
+                warning+=1
+                time.sleep(1)
+        #HUMEDAD EN LAS RAICES
+            if d[0]>=u:
+                True
+            else:
+                alertaTempRaiz+=1
+                setText("Raices frias")
+                setRGB(254, 185, 58)
+                warning+=1
+                time.sleep(1)
+                
+            if d[1]>=v:
+                True
+            else:
+                alertaHumedadRaiz+=1
+                setText("Raices secas")
+                setRGB(254, 185, 58)
+                warning+=1
+                time.sleep(1)
+ 
 
         #
         #Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que enseñe un error critico y buzeer para saber si funciona bien todo
@@ -512,6 +537,7 @@ def main():
         #
         #Cada warning que haya oscurecera el color del lcd, tres warnings indicarian un error critico, por cada warning una alerta sonora corta
         #
+        
         if critico >= 0:
             setText("Error critico")
             setRGB(255, 0, 0)
@@ -528,11 +554,17 @@ def main():
             setRGB(254, 185, 58)# Amarillo
         elif warning == 0:
             setRGB(0, 255, 0)
+            setText("Funcionamiento correctamente")
         
         #         setText("Hello world, this is a test")
         #         setRGB(0,128,64)
         
         
+
+# start = time.time()
+# print("hello")
+# end = time.time()
+# print(end - start)
         
         
         
