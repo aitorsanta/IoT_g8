@@ -376,7 +376,8 @@ def humedad():
 #LCD
 
 def pantalla():
-
+    global critico
+    global warning
     url = 'https://corlysis.com:8086/write'
     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
     while True:
