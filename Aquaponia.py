@@ -42,6 +42,9 @@ import RPi.GPIO as GPIO
 import threading
 #
 
+#Corlysis
+import requests
+
 #ESTOS SON LOS QUE HABRIA QUE ASIGNAR A LOS VALORES GLOBALES
 #         print ("Temperature : ", temperature, "C")
 #         print ("Pressure : ", pressure, "hPa")
@@ -294,6 +297,7 @@ def patmosferica():
         #Return los 3 valores en un array y luego procesarlos
         if __name__=="__main__":
             main()
+#		return temperature,pressure,humidity
     
             
 #Luz PROBADO OK
@@ -373,9 +377,18 @@ def humedad():
 #LCD
 
 def pantalla():
+
+	url = 'https://corlysis.com:8086/write'
+	params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
     while True:
         try:
             a=patmosferica()
+			payload = "meas_test,place=temperatura value="+a[0]+"\n"
+			r = requests.post(url, params=params, data=payload)
+			payload = "meas_test,place=presion value="+a[1]+"\n"
+			r = requests.post(url, params=params, data=payload)
+			#payload = "meas_test,place=humedad value="+a[2]+"\n"
+			#r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura P.atmosferica")
             critico+=1
@@ -383,6 +396,8 @@ def pantalla():
         #LUZ DE LA PLANTA 
         try:
             b=luz()
+			payload = "meas_test,place=luz value="+b+"\n"
+			r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de luz")
             critico+=1
@@ -390,6 +405,8 @@ def pantalla():
         #GASES EN EL AMBIENTE DE LA PLANTA
         try:
             c=gas()
+			payload = "meas_test,place=gas value="+c+"\n"
+			r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de gas")
             critico+=1
@@ -397,6 +414,8 @@ def pantalla():
         #HUMEDAD EN LAS RAICES
         try:
             d=humedad()
+			payload = "meas_test,place=humedad value="+d+"\n"
+			r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de humedad")
             critico+=1
