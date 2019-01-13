@@ -602,8 +602,8 @@ def main():
 # end = time.time()
 # print(end - start)
         
-warning=0
-critico=0       
+global warning=0
+global critico=0       
 a0=0
 a1=0
 a2=0
