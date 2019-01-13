@@ -552,7 +552,7 @@ def main():
                 warning+=1
                 time.sleep(1)
         #HUMEDAD EN LAS RAICES
-            if d0==u:
+            if d==u:
                 True
             else:
                 alertaTempRaiz+=1
