@@ -352,7 +352,7 @@ def humedad():
     GPIO.setup(channel, GPIO.IN)
     def callback(channel):
             if GPIO.input(channel):
-                    print("No hay humedad")
+                    print("No humedad")
                     return 0
             else:
                     print("Hay suficiente humedad")
@@ -410,10 +410,10 @@ def pantalla():
         try:
             d=humedad()
             print("EL VALOR DE D es=",d)
-            if d==0:
-                print("No hay humedad")
+            if d==None:
+                print("No hay humedad (1)")
             else:
-                print("Hay humedad")
+                print("Hay humedad (1)")
             payload = "meas_test,place=humedad value="+d+"\n"
             r = requests.post(url, params=params, data=payload)
         except:
@@ -601,6 +601,7 @@ def main():
             
     except KeyboardInterrupt:    
         thr.join()
+        thr._stop()
         exit(0)
 
 # start = time.time()
