@@ -347,7 +347,7 @@ def gas():
 
 #Humedad
 def humedad():
-    channel = 21
+    channel = 1 #21
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(channel, GPIO.IN)
     def callback(channel):
