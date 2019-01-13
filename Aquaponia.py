@@ -387,8 +387,8 @@ def pantalla():
 			r = requests.post(url, params=params, data=payload)
 			payload = "meas_test,place=presion value="+a[1]+"\n"
 			r = requests.post(url, params=params, data=payload)
-			#payload = "meas_test,place=humedad value="+a[2]+"\n"
-			#r = requests.post(url, params=params, data=payload)
+			payload = "meas_test,place=humedadAmbiente value="+a[2]+"\n"
+			r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura P.atmosferica")
             critico+=1
