@@ -360,7 +360,7 @@ def humedad():
 
     GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)  # let us know when the pin goes HIGH or LOW
     GPIO.add_event_callback(channel, callback)  # assign function to GPIO PIN, Run function on change
-     
+    
     # infinite loop
 #     while True:
 #         time.sleep(1)
@@ -409,6 +409,10 @@ def pantalla():
         #HUMEDAD EN LAS RAICES
         try:
             d=humedad()
+            if d==0:
+                print("No hay humedad")
+            else:
+                print("Hay humedad")
             payload = "meas_test,place=humedad value="+d+"\n"
             r = requests.post(url, params=params, data=payload)
         except:
