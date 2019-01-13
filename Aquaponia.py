@@ -38,6 +38,9 @@ import smbus
 import RPi.GPIO as GPIO
 #
 
+#Threads
+import threading
+#
 
 #ESTOS SON LOS QUE HABRIA QUE ASIGNAR A LOS VALORES GLOBALES
 #         print ("Temperature : ", temperature, "C")
@@ -296,30 +299,30 @@ def patmosferica():
 #Luz PROBADO OK
 def luz():
 # Start SPI connection
-spi = spidev.SpiDev()
-spi.open(0,0)   
+    spi = spidev.SpiDev()
+    spi.open(0,0)   
 
-# Read MCP3008 data
-def analogInput(channel):
-    if ((channel > 7) or (channel < 0)):
-        return -1
-    spi.max_speed_hz = 1350000
-    adc = spi.xfer2([1,(8+channel)<<4,0])
-    data = ((adc[1]&3) << 8) + adc[2]
-    return data
-
-def mainn():
-    try:
-        while True:
-            output = analogInput(int(argv[1])) # Reading from CH0
-            print(output)
-            sleep(0.2)
-    except IndexError:
-        print("please, introduce the ADC chanel in which you want to read from.")
-        exit(0)
-
-if __name__== "__main__":
-    mainn()
+    # Read MCP3008 data
+    def analogInput(channel):
+        if ((channel > 7) or (channel < 0)):
+            return -1
+        spi.max_speed_hz = 1350000
+        adc = spi.xfer2([1,(8+channel)<<4,0])
+        data = ((adc[1]&3) << 8) + adc[2]
+        return data
+    
+    def mainn():
+        try:
+            while True:
+                output = analogInput(int(argv[1])) # Reading from CH0
+                print(output)
+                sleep(0.2)
+        except IndexError:
+            print("please, introduce the ADC chanel in which you want to read from.")
+            exit(0)
+    
+    if __name__== "__main__":
+        mainn()
 
 
 
@@ -333,15 +336,15 @@ def gas():
     try:
         while True:
             if GPIO.input(4): #Si detectamos que el sensor se ha activado por la presencia de vapores
-                print "HUMO DETECTADO" #Sacamos por pantalla HUMO DETECTADO
+                print("HUMO DETECTADO") #Sacamos por pantalla HUMO DETECTADO
                 GPIO.output(7, False) #Enviamos la senal de activacion al buzzer pin 7 HIGH
                 time.sleep(5) #La senal (pitido) dura 5 segundos
                 GPIO.output(7,True) #Cerramos la senal poniendo el pin 7 en LOW y el buzzer se calla.
     # Seguimos a la espera de otra senal por parte del sensor MQ-135
             else:
-               # print "No hay gases toxicos" 
+                print("No hay gases toxicos")
     except KeyboardInterrupt:
-        print "El usuario ha forzado la detencion del script"
+        print("El usuario ha forzado la detencion del script")
         GPIO.cleanup()
     #Con keyboardinterrupt detectamos si el usuario pulsa CONTROL + C y si es asi 
     #cerramos el script y "limpiamos" los pines GPIO con GPIO.cleanup()
@@ -354,9 +357,9 @@ def humedad():
      
     def callback(channel):
             if GPIO.input(channel):
-                    print "no Water Detected!"
+                    print("No hay humedad")
             else:
-                    print "hay"
+                    print("Hay suficiente humedad")
      
     GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)  # let us know when the pin goes HIGH or LOW
     GPIO.add_event_callback(channel, callback)  # assign function to GPIO PIN, Run function on change
@@ -369,72 +372,8 @@ def humedad():
 
 #LCD
 
-def main():
-    start = time.time()
-    warning=0
-    critico=0
-    a=[]
-    d=[]
-    
-    
-    alertaTemp=0 #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
-    alertaPresion=0
-    alertaHumedad=0
-    
-    alertaLuz=0 #SENSOR DE LUZ
-    
-    alertaGas=0 #SENSOR DE GAS
-    
-    alertaTempRaiz=0 #SENSOR TEMPERATURA RAICES/TIERRA
-    
-    alertaHumedadRaiz=0
-    
-    
-    
+def pantalla():
     while True:
-        #buzzer() SERIA ACTUADOR        
-        #lcd() ACTUADOR
-        
-        #inicializar estos valores por si hay lectura errornea o lo que sea (pruebas)
-        warning=0
-        critico=0
-        
-        #Alertas personalizadas
-        
-        
-        
-        #Variables que seran sustituidos por valores de comparacion reales o los que tienen que ser
-        
-        #VALORES ADECUADOS
-        
-        #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
-        p=0 #valor de temperatura
-        q=0 #valor de presion
-        r=0 #valor de humedad
-        
-        #SENSOR DE LUZ
-        s=0 #valor de luz
-        
-        #SENSOR DE GAS (Hay que ver particulas)
-        t=0 #valor de gas
-        
-        #SENSOR TEMPERATURA RAICES/TIERRA
-        u=0 #valor de temperatura
-        v=0 #valor de humedad
-        
-        #EN CASO DE AMPLIAR LOS SENSORES/LOS VALORES QUE UTILICEMOS EN LA PRUEBA DE SENSORES DE GAS Y DEMAS
-        w=0 #valor auxiliar
-        x=0 #valor auxiliar
-        y=0 #valor auxiliar
-        z=0 #valor auxiliar
-        
-        
-        end = time.time()
-        diff=round(end-start)
-#         print(round(end - start))
-   
-        
-        #PRESION ATMOSFERICA
         try:
             a=patmosferica()
         except:
@@ -461,9 +400,101 @@ def main():
         except:
             setText("Error lectura de humedad")
             critico+=1
-            time.sleep(1)              
+            time.sleep(1)    
+
+
+
+
+
+def main():
+    start = time.time()
+
+    a=[]
+    d=[]
+    
+    
+    alertaTemp=0 #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
+    alertaPresion=0
+    alertaHumedad=0
+    
+    alertaLuz=0 #SENSOR DE LUZ
+    
+    alertaGas=0 #SENSOR DE GAS
+    
+    alertaTempRaiz=0 #SENSOR TEMPERATURA RAICES/TIERRA
+    
+    alertaHumedadRaiz=0
+    threads = list()
+    t = threading.Thread(target=pantalla)
+    threads.append(t)
+    
+    
+    
+    while True:
+        #buzzer() SERIA ACTUADOR        
+        #lcd() ACTUADOR
+        
+        #inicializar estos valores por si hay lectura errornea o lo que sea (pruebas)
+        warning=0
+        critico=0
+
+        #Variables que seran sustituidos por valores de comparacion reales o los que tienen que ser
+        
+        #VALORES ADECUADOS
+        
+        #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
+        p=0 #valor de temperatura
+        q=0 #valor de presion
+        r=0 #valor de humedad
+        
+        #SENSOR DE LUZ
+        s=0 #valor de luz
+        
+        #SENSOR DE GAS (Hay que ver particulas)
+        t=0 #valor de gas
+        
+        #SENSOR TEMPERATURA RAICES/TIERRA
+        u=0 #valor de temperatura
+        v=0 #valor de humedad
+        
+        
+        
+        end = time.time()
+        diff=round(end-start)
+#       print(round(end - start))
+        
+        
+        t.start()
+        #ESTO SERIA EL CODIGO DEL HILO
+#         try:
+#             a=patmosferica()
+#         except:
+#             setText("Error lectura P.atmosferica")
+#             critico+=1
+#             time.sleep(1)
+#         #LUZ DE LA PLANTA 
+#         try:
+#             b=luz()
+#         except:
+#             setText("Error lectura de luz")
+#             critico+=1
+#             time.sleep(1)       
+#         #GASES EN EL AMBIENTE DE LA PLANTA
+#         try:
+#             c=gas()
+#         except:
+#             setText("Error lectura de gas")
+#             critico+=1
+#             time.sleep(1)   
+#         #HUMEDAD EN LAS RAICES
+#         try:
+#             d=humedad()
+#         except:
+#             setText("Error lectura de humedad")
+#             critico+=1
+#             time.sleep(1)              
         #Habria que ver como funcionan estas condiciones
-        if diff%10=0 or diff%10=1 or diff%10=9:            
+        if diff%10==0 or diff%10==1 or diff%10==9:            
             if a[0]>=p:
                 True
             else:
@@ -566,9 +597,13 @@ def main():
 # end = time.time()
 # print(end - start)
         
-        
-        
-        
+warning=0
+critico=0       
+a=[]
+b=0
+c=0
+d=[]
+main()    
         
         
         
