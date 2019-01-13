@@ -359,8 +359,10 @@ def humedad():
     def callback(channel):
             if GPIO.input(channel):
                     print("No hay humedad")
+                    return 0
             else:
                     print("Hay suficiente humedad")
+                    return 1
      
     GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)  # let us know when the pin goes HIGH or LOW
     GPIO.add_event_callback(channel, callback)  # assign function to GPIO PIN, Run function on change
@@ -410,7 +412,7 @@ def pantalla():
             time.sleep(1)   
         #HUMEDAD EN LAS RAICES
         try:
-            d=humedad()
+            d0,d1=humedad()
             payload = "meas_test,place=humedad value="+d+"\n"
             r = requests.post(url, params=params, data=payload)
         except:
@@ -424,10 +426,6 @@ def pantalla():
 
 def main():
     start = time.time()
-
-    a=[]
-    d=[]
-    
     
     alertaTemp=0 #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
     alertaPresion=0
@@ -470,8 +468,7 @@ def main():
         t=0 #valor de gas
         
         #SENSOR TEMPERATURA RAICES/TIERRA
-        u=0 #valor de temperatura
-        v=0 #valor de humedad
+        u=1 #valor de humedad
         
         
         
@@ -555,7 +552,7 @@ def main():
                 warning+=1
                 time.sleep(1)
         #HUMEDAD EN LAS RAICES
-            if d[0]>=u:
+            if d0==u:
                 True
             else:
                 alertaTempRaiz+=1
@@ -563,15 +560,7 @@ def main():
                 setRGB(254, 185, 58)
                 warning+=1
                 time.sleep(1)
-                
-            if d[1]>=v:
-                True
-            else:
-                alertaHumedadRaiz+=1
-                setText("Raices secas")
-                setRGB(254, 185, 58)
-                warning+=1
-                time.sleep(1)
+
  
 
         #
@@ -621,6 +610,6 @@ a1=0
 a2=0
 b=0
 c=0
-d=[]
+d=0
 main()    
 
