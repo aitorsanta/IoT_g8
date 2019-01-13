@@ -357,9 +357,9 @@ def humedad():
             else:
                     print("Hay suficiente humedad")
                     return 1
-    callback()
+
 #     GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)  # let us know when the pin goes HIGH or LOW
-#     GPIO.add_event_callback(channel, callback)  # assign function to GPIO PIN, Run function on change
+    GPIO.add_event_callback(channel, callback)  # assign function to GPIO PIN, Run function on change
      
     # infinite loop
 #     while True:
@@ -372,7 +372,7 @@ def humedad():
 def pantalla():
     global critico
     global warning
-    url = 'http://corlysis.com:8087'
+    url = 'http://corlysis.com:8087/write'
     #url = 'https://corlysis.com:8086/write'
     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
     while True:
