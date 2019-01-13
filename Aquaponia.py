@@ -23,7 +23,7 @@ from sys import argv, exit
 import RPi.GPIO as GPIO
 import time
 
-# lcd = CharLCD(cols=16, rows=2, pin_rs=37, pin_e=35, pins_data=[33, 31, 29, 23])
+
 #
 
 #Imports Gas
@@ -294,7 +294,7 @@ def patmosferica():
     print ("Pressure : ", pressure, "hPa")
     print ("Humidity : ", humidity, "%")
     #Return los 3 valores en un array y luego procesarlos
-    return (temperature,pressure,humidity)
+    return temperature,pressure,humidity
     
             
 #Luz PROBADO OK
@@ -379,12 +379,12 @@ def pantalla():
     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
     while True:
         try:
-            a=patmosferica()
-            payload = "meas_test,place=temperatura value="+a[0]+"\n"
+            a0,a1,a2=patmosferica()
+            payload = "meas_test,place=temperatura value="+a0+"\n"
             r = requests.post(url, params=params, data=payload)
-            payload = "meas_test,place=presion value="+a[1]+"\n"
+            payload = "meas_test,place=presion value="+a1+"\n"
             r = requests.post(url, params=params, data=payload)
-            payload = "meas_test,place=humedadAmbiente value="+a[2]+"\n"
+            payload = "meas_test,place=humedadAmbiente value="+a2+"\n"
             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura P.atmosferica")
@@ -512,7 +512,7 @@ def main():
 #             time.sleep(1)              
         #Habria que ver como funcionan estas condiciones
         if diff%10==0 or diff%10==1 or diff%10==9:            
-            if a[0]>=p:
+            if a0>=p:
                 True
             else:
                 alertaTemp+=1
@@ -520,7 +520,7 @@ def main():
                 setRGB(254, 185, 58)
                 warning+=1
                 time.sleep(1)
-            if a[1]>=q:
+            if a1>=q:
                 True
             else:
                 alertaPresion+=1
@@ -528,7 +528,7 @@ def main():
                 setRGB(254, 185, 58)
                 warning+=1
                 time.sleep(1)
-            if a[2]>=r:
+            if a2>=r:
                 True
             else:
                 alertaHumedad+=1
@@ -575,7 +575,7 @@ def main():
  
 
         #
-        # Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que ensene un error critico y buzeer para saber si funciona bien todo
+        #Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que ensene un error critico y buzeer para saber si funciona bien todo
         #
         #SISTEMA DE VALORES
         #
@@ -616,7 +616,9 @@ def main():
         
 warning=0
 critico=0       
-a=[]
+a0=0
+a1=0
+a2=0
 b=0
 c=0
 d=[]
