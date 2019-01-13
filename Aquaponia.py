@@ -1,4 +1,3 @@
-
 #Created on 27 dic. 2018
 
 #@author: G8
@@ -282,22 +281,20 @@ def patmosferica():
             humidity = 0
 
         return temperature/100.0,pressure/100.0,humidity
-
-    def main():
-        #Extraer los valores para asignarlos a los valores globales 
-        (chip_id, chip_version) = readBME280ID()
-        print ("Chip ID     :", chip_id)
-        print ("Version     :", chip_version)
     
-        temperature,pressure,humidity = readBME280All()
-        #ESTO
-        print ("Temperature : ", temperature, "C")
-        print ("Pressure : ", pressure, "hPa")
-        print ("Humidity : ", humidity, "%")
-        #Return los 3 valores en un array y luego procesarlos
-        if __name__=="__main__":
-            main()
-#		return temperature,pressure,humidity
+
+    #Extraer los valores para asignarlos a los valores globales 
+    (chip_id, chip_version) = readBME280ID()
+    print ("Chip ID     :", chip_id)
+    print ("Version     :", chip_version)
+
+    temperature,pressure,humidity = readBME280All()
+    #ESTO
+    print ("Temperature : ", temperature, "C")
+    print ("Pressure : ", pressure, "hPa")
+    print ("Humidity : ", humidity, "%")
+    #Return los 3 valores en un array y luego procesarlos
+    return [temperature,pressure,humidity]
     
             
 #Luz PROBADO OK
@@ -378,17 +375,17 @@ def humedad():
 
 def pantalla():
 
-	url = 'https://corlysis.com:8086/write'
-	params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
+    url = 'https://corlysis.com:8086/write'
+    params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
     while True:
         try:
             a=patmosferica()
-			payload = "meas_test,place=temperatura value="+a[0]+"\n"
-			r = requests.post(url, params=params, data=payload)
-			payload = "meas_test,place=presion value="+a[1]+"\n"
-			r = requests.post(url, params=params, data=payload)
-			payload = "meas_test,place=humedadAmbiente value="+a[2]+"\n"
-			r = requests.post(url, params=params, data=payload)
+            payload = "meas_test,place=temperatura value="+a[0]+"\n"
+            r = requests.post(url, params=params, data=payload)
+            payload = "meas_test,place=presion value="+a[1]+"\n"
+            r = requests.post(url, params=params, data=payload)
+            payload = "meas_test,place=humedadAmbiente value="+a[2]+"\n"
+            r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura P.atmosferica")
             critico+=1
@@ -396,8 +393,8 @@ def pantalla():
         #LUZ DE LA PLANTA 
         try:
             b=luz()
-			payload = "meas_test,place=luz value="+b+"\n"
-			r = requests.post(url, params=params, data=payload)
+            payload = "meas_test,place=luz value="+b+"\n"
+            r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de luz")
             critico+=1
@@ -405,8 +402,8 @@ def pantalla():
         #GASES EN EL AMBIENTE DE LA PLANTA
         try:
             c=gas()
-			payload = "meas_test,place=gas value="+c+"\n"
-			r = requests.post(url, params=params, data=payload)
+            payload = "meas_test,place=gas value="+c+"\n"
+            r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de gas")
             critico+=1
@@ -414,8 +411,8 @@ def pantalla():
         #HUMEDAD EN LAS RAICES
         try:
             d=humedad()
-			payload = "meas_test,place=humedad value="+d+"\n"
-			r = requests.post(url, params=params, data=payload)
+            payload = "meas_test,place=humedad value="+d+"\n"
+            r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de humedad")
             critico+=1
@@ -444,8 +441,8 @@ def main():
     
     alertaHumedadRaiz=0
     threads = list()
-    t = threading.Thread(target=pantalla)
-    threads.append(t)
+    thr = threading.Thread(target=pantalla)
+    threads.append(thr)
     tr=0
     
     
@@ -483,7 +480,7 @@ def main():
 #       print(round(end - start))
         
         if tr==0:
-            t.start()
+            thr.start()
             tr=1
         #ESTO SERIA EL CODIGO DEL HILO
 #         try:
@@ -578,7 +575,7 @@ def main():
  
 
         #
-        #Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que enseÃ±e un error critico y buzeer para saber si funciona bien todo
+        #Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que enseñe un error critico y buzeer para saber si funciona bien todo
         #
         #SISTEMA DE VALORES
         #
@@ -624,18 +621,4 @@ b=0
 c=0
 d=[]
 main()    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
