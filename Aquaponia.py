@@ -435,9 +435,10 @@ def main():
     
     alertaGas=0 #SENSOR DE GAS
     
-    alertaTempRaiz=0 #SENSOR TEMPERATURA RAICES/TIERRA
-    
+    #SENSOR TEMPERATURA RAICES/TIERRA
     alertaHumedadRaiz=0
+    
+    
     threads = list()
     thr = threading.Thread(target=pantalla)
     threads.append(thr)
@@ -449,8 +450,6 @@ def main():
         #lcd() ACTUADOR
         
         #inicializar estos valores por si hay lectura errornea o lo que sea (pruebas)
-        warning=0
-        critico=0
 
         #Variables que seran sustituidos por valores de comparacion reales o los que tienen que ser
         
@@ -555,8 +554,8 @@ def main():
             if d==u:
                 True
             else:
-                alertaTempRaiz+=1
-                setText("Raices frias")
+                alertaHumedadRaiz+=1
+                setText("Raices secas")
                 setRGB(254, 185, 58)
                 warning+=1
                 time.sleep(1)
