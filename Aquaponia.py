@@ -22,9 +22,14 @@ from sys import argv, exit
 # Imports Humedad
 import RPi.GPIO as GPIO
 import time
-
-
 #
+
+#Imports de control + c
+import signal
+import sys
+
+
+
 
 #Imports Gas
 import RPi.GPIO as GPIO #Importamos la libreria GPIO
@@ -43,6 +48,17 @@ import threading
 
 #Corlysis
 import requests
+
+
+
+def signal_handler(signal,frame):
+    sys.exit(0)
+signal.signal(signal.SIGINT,signal_handler)
+
+
+
+
+
 
 #ESTOS SON LOS QUE HABRIA QUE ASIGNAR A LOS VALORES GLOBALES
 #         print ("Temperature : ", temperature, "C")
