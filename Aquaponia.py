@@ -333,17 +333,15 @@ def gas():
     GPIO.setup(4, GPIO.IN) #Indicamos que el pin 4 sera de entrada
     GPIO.setup(7, GPIO.OUT) #Indicamos que el pin 7 sera de salida
     GPIO.output(7,True) #Indicamos que el pin 7 esta LOW (sin senal)
-     
     try:
-        while True:
-            if GPIO.input(4): #Si detectamos que el sensor se ha activado por la presencia de vapores
-                print("HUMO DETECTADO") #Sacamos por pantalla HUMO DETECTADO
-                GPIO.output(7, False) #Enviamos la senal de activacion al buzzer pin 7 HIGH
-                time.sleep(5) #La senal (pitido) dura 5 segundos
-                GPIO.output(7,True) #Cerramos la senal poniendo el pin 7 en LOW y el buzzer se calla.
-    # Seguimos a la espera de otra senal por parte del sensor MQ-135
-            else:
-                print("No hay gases toxicos")
+        if GPIO.input(4): #Si detectamos que el sensor se ha activado por la presencia de vapores
+            print("Humo detectado") #Sacamos por pantalla HUMO DETECTADO
+            GPIO.output(7, False) #Enviamos la senal de activacion al buzzer pin 7 HIGH
+            time.sleep(5) #La senal (pitido) dura 5 segundos
+            GPIO.output(7,True) #Cerramos la senal poniendo el pin 7 en LOW y el buzzer se calla.
+        # Seguimos a la espera de otra senal por parte del sensor MQ-135
+        else:
+            print("No hay gases toxicos")
     except KeyboardInterrupt:
         print("El usuario ha forzado la detencion del script")
         GPIO.cleanup()
@@ -355,7 +353,6 @@ def humedad():
     channel = 21
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(channel, GPIO.IN)
-     
     def callback(channel):
             if GPIO.input(channel):
                     print("No hay humedad")
