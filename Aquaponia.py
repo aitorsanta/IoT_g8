@@ -312,18 +312,15 @@ def luz():
         data = ((adc[1]&3) << 8) + adc[2]
         return data
     
-    def mainn():
-        try:
-            while True:
-                output = analogInput(int(argv[1])) # Reading from CH0
-                print(output)
-                sleep(0.2)
-        except IndexError:
-            print("please, introduce the ADC chanel in which you want to read from.")
-            exit(0)
-    
-    if __name__== "__main__":
-        mainn()
+    try:
+        #output = analogInput(int(argv[1]))
+        output = analogInput(int(2)) # Reading from CH0
+        print(output)
+        return output
+    except IndexError:
+        print("please, introduce the ADC chanel in which you want to read from.")
+        #exit(0)
+
 
 
 
