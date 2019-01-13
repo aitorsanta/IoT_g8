@@ -409,6 +409,7 @@ def pantalla():
         #HUMEDAD EN LAS RAICES
         try:
             d=humedad()
+            print("EL VALOR DE D es=",d)
             if d==0:
                 print("No hay humedad")
             else:
