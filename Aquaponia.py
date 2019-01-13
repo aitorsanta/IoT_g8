@@ -453,6 +453,9 @@ def main():
 
         #Variables que seran sustituidos por valores de comparacion reales o los que tienen que ser
         
+        global warning
+        global critico
+        
         #VALORES ADECUADOS
         
         #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
@@ -601,9 +604,9 @@ def main():
 # print("hello")
 # end = time.time()
 # print(end - start)
-        
-global warning=0
-global critico=0       
+
+warning=0
+critico=0       
 a0=0
 a1=0
 a2=0
