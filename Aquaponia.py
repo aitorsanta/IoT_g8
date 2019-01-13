@@ -315,7 +315,7 @@ def luz():
     try:
         #output = analogInput(int(argv[1]))
         output = analogInput(int(2)) # Reading from CH0
-        print(output)
+        print("Nivel de luz",output)
         return output
     except IndexError:
         print("please, introduce the ADC chanel in which you want to read from.")
@@ -372,7 +372,7 @@ def humedad():
 def pantalla():
     global critico
     global warning
-    url = 'http://corlysis.com:8087/write'
+    url = 'http://corlysis.com:8087'
     #url = 'https://corlysis.com:8086/write'
     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
     while True:
@@ -408,7 +408,7 @@ def pantalla():
             time.sleep(1)   
         #HUMEDAD EN LAS RAICES
         try:
-            d0,d1=humedad()
+            d=humedad()
             payload = "meas_test,place=humedad value="+d+"\n"
             r = requests.post(url, params=params, data=payload)
         except:
@@ -611,5 +611,8 @@ a2=0
 b=0
 c=0
 d=0
-main()
+try:
+    main()
+except:
+    exit(0)
 
