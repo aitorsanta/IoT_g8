@@ -23,7 +23,7 @@ from sys import argv, exit
 import RPi.GPIO as GPIO
 import time
 
-lcd = CharLCD(cols=16, rows=2, pin_rs=37, pin_e=35, pins_data=[33, 31, 29, 23])
+# lcd = CharLCD(cols=16, rows=2, pin_rs=37, pin_e=35, pins_data=[33, 31, 29, 23])
 #
 
 #Imports Gas
@@ -294,7 +294,7 @@ def patmosferica():
     print ("Pressure : ", pressure, "hPa")
     print ("Humidity : ", humidity, "%")
     #Return los 3 valores en un array y luego procesarlos
-    return [temperature,pressure,humidity]
+    return (temperature,pressure,humidity)
     
             
 #Luz PROBADO OK
@@ -575,7 +575,7 @@ def main():
  
 
         #
-        #Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que enseñe un error critico y buzeer para saber si funciona bien todo
+        # Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que ensene un error critico y buzeer para saber si funciona bien todo
         #
         #SISTEMA DE VALORES
         #
