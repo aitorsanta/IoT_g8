@@ -427,7 +427,7 @@ def main():
     threads = list()
     t = threading.Thread(target=pantalla)
     threads.append(t)
-    
+    tr=0
     
     
     while True:
@@ -463,8 +463,9 @@ def main():
         diff=round(end-start)
 #       print(round(end - start))
         
-        
-        t.start()
+        if tr==0:
+            t.start()
+            tr=1
         #ESTO SERIA EL CODIGO DEL HILO
 #         try:
 #             a=patmosferica()
