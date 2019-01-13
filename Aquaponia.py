@@ -372,7 +372,8 @@ def humedad():
 def pantalla():
     global critico
     global warning
-    url = 'https://corlysis.com:8086/write'
+    url = 'http://corlysis.com:8087/write'
+    #url = 'https://corlysis.com:8086/write'
     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
     while True:
         try:
@@ -439,161 +440,163 @@ def main():
     threads.append(thr)
     tr=0
     
+    try:
+        while True:
+            #buzzer() SERIA ACTUADOR        
+            #lcd() ACTUADOR
+            
+            #inicializar estos valores por si hay lectura errornea o lo que sea (pruebas)
     
-    while True:
-        #buzzer() SERIA ACTUADOR        
-        #lcd() ACTUADOR
-        
-        #inicializar estos valores por si hay lectura errornea o lo que sea (pruebas)
-
-        #Variables que seran sustituidos por valores de comparacion reales o los que tienen que ser
-        
-        global warning
-        global critico
-        
-        #VALORES ADECUADOS
-        
-        #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
-        p=0 #valor de temperatura
-        q=0 #valor de presion
-        r=0 #valor de humedad
-        
-        #SENSOR DE LUZ
-        s=0 #valor de luz
-        
-        #SENSOR DE GAS (Hay que ver particulas)
-        t=0 #valor de gas
-        
-        #SENSOR TEMPERATURA RAICES/TIERRA
-        u=1 #valor de humedad
-        
-        
-        
-        end = time.time()
-        diff=round(end-start)
-#       print(round(end - start))
-        
-        if tr==0:
-            thr.start()
-            tr=1
-        #ESTO SERIA EL CODIGO DEL HILO
-#         try:
-#             a=patmosferica()
-#         except:
-#             setText("Error lectura P.atmosferica")
-#             critico+=1
-#             time.sleep(1)
-#         #LUZ DE LA PLANTA 
-#         try:
-#             b=luz()
-#         except:
-#             setText("Error lectura de luz")
-#             critico+=1
-#             time.sleep(1)       
-#         #GASES EN EL AMBIENTE DE LA PLANTA
-#         try:
-#             c=gas()
-#         except:
-#             setText("Error lectura de gas")
-#             critico+=1
-#             time.sleep(1)   
-#         #HUMEDAD EN LAS RAICES
-#         try:
-#             d=humedad()
-#         except:
-#             setText("Error lectura de humedad")
-#             critico+=1
-#             time.sleep(1)              
-        #Habria que ver como funcionan estas condiciones
-        if diff%10==0 or diff%10==1 or diff%10==9:            
-            if a0>=p:
-                True
-            else:
-                alertaTemp+=1
-                setText("Temperatura baja")
-                setRGB(254, 185, 58)
-                warning+=1
-                time.sleep(1)
-            if a1>=q:
-                True
-            else:
-                alertaPresion+=1
-                setText("Presion atmosferica inestable")
-                setRGB(254, 185, 58)
-                warning+=1
-                time.sleep(1)
-            if a2>=r:
-                True
-            else:
-                alertaHumedad+=1
-                setText("Poca humedad")
-                setRGB(254, 185, 58)
-                warning+=1
-                time.sleep(1)
-        #LUZ DE LA PLANTA
-            if b>=s:
-                True
-            else:
-                alertaLuz+=1
-                setText("Falta de luz")
-                setRGB(254, 185, 58)
-                warning+=1
-                time.sleep(1)
-        #GASES EN EL AMBIENTE DE LA PLANTA
-            if c>=t:
-                True
-            else:
-                alertaGas+=1
-                setText("Poco oxigeno")
-                setRGB(254, 185, 58)
-                warning+=1
-                time.sleep(1)
-        #HUMEDAD EN LAS RAICES
-            if d==u:
-                True
-            else:
-                alertaHumedadRaiz+=1
-                setText("Raices secas")
-                setRGB(254, 185, 58)
-                warning+=1
-                time.sleep(1)
-
- 
-
-        #
-        #Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que ensene un error critico y buzeer para saber si funciona bien todo
-        #
-        #SISTEMA DE VALORES
-        #
-        #Bien
-        #Warning
-        #Critico
-        #
-        #Cada warning que haya oscurecera el color del lcd, tres warnings indicarian un error critico, por cada warning una alerta sonora corta
-        #
-        
-        if critico >= 0:
-            setText("Error critico")
-            setRGB(255, 0, 0)
-        elif warning>=3:
-            setRGB(199, 92, 52)
-            setText("Demasiadas alertas")
-            time.sleep(8)
-            critico+=1
-        elif warning == 2:
-            setText("Dos alertas, revisa el sistema")
-            setRGB(251, 150, 96)# Rosa
-        elif warning == 1:
-            setText("Una alerta, revisa el sistema")
-            setRGB(254, 185, 58)# Amarillo
-        elif warning == 0:
-            setRGB(0, 255, 0)
-            setText("Funcionamiento correctamente")
-        
-        #         setText("Hello world, this is a test")
-        #         setRGB(0,128,64)
-        
-        
+            #Variables que seran sustituidos por valores de comparacion reales o los que tienen que ser
+            
+            global warning
+            global critico
+            
+            #VALORES ADECUADOS
+            
+            #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
+            p=0 #valor de temperatura
+            q=0 #valor de presion
+            r=0 #valor de humedad
+            
+            #SENSOR DE LUZ
+            s=0 #valor de luz
+            
+            #SENSOR DE GAS (Hay que ver particulas)
+            t=0 #valor de gas
+            
+            #SENSOR TEMPERATURA RAICES/TIERRA
+            u=1 #valor de humedad
+            
+            
+            
+            end = time.time()
+            diff=round(end-start)
+    #       print(round(end - start))
+            
+            if tr==0:
+                thr.start()
+                tr=1
+            #ESTO SERIA EL CODIGO DEL HILO
+    #         try:
+    #             a=patmosferica()
+    #         except:
+    #             setText("Error lectura P.atmosferica")
+    #             critico+=1
+    #             time.sleep(1)
+    #         #LUZ DE LA PLANTA 
+    #         try:
+    #             b=luz()
+    #         except:
+    #             setText("Error lectura de luz")
+    #             critico+=1
+    #             time.sleep(1)       
+    #         #GASES EN EL AMBIENTE DE LA PLANTA
+    #         try:
+    #             c=gas()
+    #         except:
+    #             setText("Error lectura de gas")
+    #             critico+=1
+    #             time.sleep(1)   
+    #         #HUMEDAD EN LAS RAICES
+    #         try:
+    #             d=humedad()
+    #         except:
+    #             setText("Error lectura de humedad")
+    #             critico+=1
+    #             time.sleep(1)              
+            #Habria que ver como funcionan estas condiciones
+            if diff%10==0 or diff%10==1 or diff%10==9:            
+                if a0>=p:
+                    True
+                else:
+                    alertaTemp+=1
+                    setText("Temperatura baja")
+                    setRGB(254, 185, 58)
+                    warning+=1
+                    time.sleep(1)
+                if a1>=q:
+                    True
+                else:
+                    alertaPresion+=1
+                    setText("Presion atmosferica inestable")
+                    setRGB(254, 185, 58)
+                    warning+=1
+                    time.sleep(1)
+                if a2>=r:
+                    True
+                else:
+                    alertaHumedad+=1
+                    setText("Poca humedad")
+                    setRGB(254, 185, 58)
+                    warning+=1
+                    time.sleep(1)
+            #LUZ DE LA PLANTA
+                if b>=s:
+                    True
+                else:
+                    alertaLuz+=1
+                    setText("Falta de luz")
+                    setRGB(254, 185, 58)
+                    warning+=1
+                    time.sleep(1)
+            #GASES EN EL AMBIENTE DE LA PLANTA
+                if c>=t:
+                    True
+                else:
+                    alertaGas+=1
+                    setText("Poco oxigeno")
+                    setRGB(254, 185, 58)
+                    warning+=1
+                    time.sleep(1)
+            #HUMEDAD EN LAS RAICES
+                if d==u:
+                    True
+                else:
+                    alertaHumedadRaiz+=1
+                    setText("Raices secas")
+                    setRGB(254, 185, 58)
+                    warning+=1
+                    time.sleep(1)
+    
+     
+    
+            #
+            #Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que ensene un error critico y buzeer para saber si funciona bien todo
+            #
+            #SISTEMA DE VALORES
+            #
+            #Bien
+            #Warning
+            #Critico
+            #
+            #Cada warning que haya oscurecera el color del lcd, tres warnings indicarian un error critico, por cada warning una alerta sonora corta
+            #
+            
+            if critico >= 0:
+                setText("Error critico")
+                setRGB(255, 0, 0)
+            elif warning>=3:
+                setRGB(199, 92, 52)
+                setText("Demasiadas alertas")
+                time.sleep(8)
+                critico+=1
+            elif warning == 2:
+                setText("Dos alertas, revisa el sistema")
+                setRGB(251, 150, 96)# Rosa
+            elif warning == 1:
+                setText("Una alerta, revisa el sistema")
+                setRGB(254, 185, 58)# Amarillo
+            elif warning == 0:
+                setRGB(0, 255, 0)
+                setText("Funcionamiento correctamente")
+            
+            #         setText("Hello world, this is a test")
+            #         setRGB(0,128,64)
+            
+    except KeyboardInterrupt:    
+        thr.join()
+        exit(0)
 
 # start = time.time()
 # print("hello")
@@ -608,5 +611,5 @@ a2=0
 b=0
 c=0
 d=0
-main()    
+main()
 
