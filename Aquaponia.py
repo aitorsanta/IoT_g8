@@ -51,14 +51,6 @@ import requests
 
 
 
-def signal_handler(signal,frame):
-    sys.exit(0)
-signal.signal(signal.SIGINT,signal_handler)
-
-
-
-
-
 
 #ESTOS SON LOS QUE HABRIA QUE ASIGNAR A LOS VALORES GLOBALES
 #         print ("Temperature : ", temperature, "C")
@@ -153,22 +145,21 @@ def create_char(location, pattern):
 #         setText("Bye bye, this should wrap onto next line")
 
 #Buzzer PROBADO OK
-def buzzer():
-
+def buzzer(number):
     buzzer = Buzzer(16)
     cont=0
-    while cont<6:
+    while cont<number:
         buzzer.on()
         sleep(0.1)
         buzzer.off()
         sleep(0.1)
         cont+=1
+        
 
-    True
 #P.atmosferica PROBADO OK
 def patmosferica(): 
     DEVICE = 0x77 # Default device I2C address
-    
+    bmp = BMP085(0x77, 1)
     
     bus = smbus.SMBus(1) # Rev 2 Pi, Pi 2 & Pi 3 uses bus 1; Rev 1 Pi uses bus 0
     
@@ -301,14 +292,16 @@ def patmosferica():
 
     #Extraer los valores para asignarlos a los valores globales 
     (chip_id, chip_version) = readBME280ID()
-    print ("Chip ID     :", chip_id)
-    print ("Version     :", chip_version)
+    #print ("Chip ID     :", chip_id)
+    #print ("Version     :", chip_version)
 
     temperature,pressure,humidity = readBME280All()
     #ESTO
     print ("Temperature : ", temperature, "C")
     print ("Pressure : ", pressure, "hPa")
     print ("Humidity : ", humidity, "%")
+    altitude = bmp.readAltitude(101560)
+    print("Altura : "altitude," m")
     #Return los 3 valores en un array y luego procesarlos
     return temperature,pressure,humidity
     
@@ -331,10 +324,10 @@ def luz():
     try:
         #output = analogInput(int(argv[1]))
         output = analogInput(int(2)) # Reading from CH0
-        print("Nivel de luz",output)
+        print("Nivel de luz : ",output)
         return output
     except IndexError:
-        print("please, introduce the ADC chanel in which you want to read from.")
+        print("No se ha podido leer el nivel de luz")
         #exit(0)
 
 
@@ -448,20 +441,7 @@ def pantalla():
 
 
 def main():
-    start = time.time()
-    
-    alertaTemp=0 #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
-    alertaPresion=0
-    alertaHumedad=0
-    
-    alertaLuz=0 #SENSOR DE LUZ
-    
-    alertaGas=0 #SENSOR DE GAS
-    
-    #SENSOR TEMPERATURA RAICES/TIERRA
-    alertaHumedadRaiz=0
-    
-    
+    start = time.time()  
     threads = list()
     thr = threading.Thread(target=pantalla)
     threads.append(thr)
@@ -537,54 +517,60 @@ def main():
                 if a0>=p:
                     True
                 else:
-                    alertaTemp+=1
+                    warning+=1
+                    buzzer(2)
                     setText("Temperatura baja")
                     setRGB(254, 185, 58)
                     warning+=1
-                    time.sleep(1)
+                    time.sleep(2)
                 if a1>=q:
                     True
                 else:
-                    alertaPresion+=1
+                    warning+=1
+                    buzzer(2)
                     setText("Presion atmosferica inestable")
                     setRGB(254, 185, 58)
                     warning+=1
-                    time.sleep(1)
+                    time.sleep(2)
                 if a2>=r:
                     True
                 else:
-                    alertaHumedad+=1
+                    warning+=1
+                    buzzer(2)
                     setText("Poca humedad")
                     setRGB(254, 185, 58)
                     warning+=1
-                    time.sleep(1)
+                    time.sleep(2)
             #LUZ DE LA PLANTA
                 if b>=s:
                     True
                 else:
-                    alertaLuz+=1
+                    warning+=1
+                    buzzer(2)
                     setText("Falta de luz")
                     setRGB(254, 185, 58)
                     warning+=1
-                    time.sleep(1)
+                    time.sleep(2)
             #GASES EN EL AMBIENTE DE LA PLANTA
                 if c>=t:
                     True
                 else:
-                    alertaGas+=1
+                    warning+=1
+                    buzzer(2)
                     setText("Poco oxigeno")
                     setRGB(254, 185, 58)
                     warning+=1
-                    time.sleep(1)
+                    time.sleep(2)
             #HUMEDAD EN LAS RAICES
                 if d==u:
                     True
                 else:
-                    alertaHumedadRaiz+=1
+                    warning+=1
+                    buzzer(2)
                     setText("Raices secas")
                     setRGB(254, 185, 58)
                     warning+=1
-                    time.sleep(1)
+                    time.sleep(2)
     
      
     
@@ -599,24 +585,34 @@ def main():
             #
             #Cada warning que haya oscurecera el color del lcd, tres warnings indicarian un error critico, por cada warning una alerta sonora corta
             #
+                   
+            
             
             if critico >= 0:
                 setText("Error critico")
                 setRGB(255, 0, 0)
+                buzzer(6)
+                time.sleep(6)
             elif warning>=3:
                 setRGB(199, 92, 52)
                 setText("Demasiadas alertas")
-                time.sleep(8)
+                buzzer(4)
+                time.sleep(6)
                 critico+=1
             elif warning == 2:
                 setText("Dos alertas, revisa el sistema")
                 setRGB(251, 150, 96)# Rosa
+                buzzer(3)
+                time.sleep(6)
             elif warning == 1:
                 setText("Una alerta, revisa el sistema")
                 setRGB(254, 185, 58)# Amarillo
+                buzzer(2)
+                time.sleep(3)
             elif warning == 0:
                 setRGB(0, 255, 0)
                 setText("Funcionamiento correctamente")
+                time.sleep(2)
             
             #         setText("Hello world, this is a test")
             #         setRGB(0,128,64)
