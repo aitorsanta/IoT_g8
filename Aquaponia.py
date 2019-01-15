@@ -544,7 +544,7 @@ def main():
                     setRGB(254, 185, 58)
                     time.sleep(2)
             
-            if critico >= 0:
+            if critico > 0:
                 setText("Error critico")
                 setRGB(0, 0, 255)
                 #buzzer()
