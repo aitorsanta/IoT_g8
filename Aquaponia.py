@@ -503,7 +503,6 @@ def main():
                     setText("Temperatura baja")
                     print("Temperatura baja")
                     setRGB(254, 185, 58)
-                    warning+=1
                     time.sleep(2)
                 if a1>=q:
                     True
@@ -513,7 +512,6 @@ def main():
                     setText("Presion atmosferica inestable")
                     print("Presion baja")
                     setRGB(254, 185, 58)
-                    warning+=1
                     time.sleep(2)
             #LUZ DE LA PLANTA
                 if b>=s:
@@ -524,7 +522,6 @@ def main():
                     setText("Falta de luz")
                     print("luz baja")
                     setRGB(254, 185, 58)
-                    warning+=1
                     time.sleep(2)
             #GASES EN EL AMBIENTE DE LA PLANTA
                 if c<t:
@@ -535,7 +532,6 @@ def main():
                     setText("Poco oxigeno")
                     print("oxigeno bajo")
                     setRGB(254, 185, 58)
-                    warning+=1
                     time.sleep(2)
             #HUMEDAD DE LA PLANTA
                 if d>u:
@@ -546,7 +542,6 @@ def main():
                     setText("Poca humedad")
                     print("humedad baja")
                     setRGB(254, 185, 58)
-                    warning+=1
                     time.sleep(2)
             
             if critico >= 0:
