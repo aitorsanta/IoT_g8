@@ -384,7 +384,7 @@ def hum():
     soilOne = ReadChannel(1)
     # Output
     print("Soil1=",soilOne)
-    
+    return soilOne
     
 
 
@@ -399,47 +399,46 @@ def pantalla():
     global c
     global d
     global bucle
-    url = 'http://corlysis.com:8087/write'
-    #url = 'https://corlysis.com:8086/write'
-    params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
+#     url = 'http://corlysis.com:8087/write'
+#     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
     while bucle:
         try:
             a0,a1=patmosferica()
-            payload = "temperatura,place=temperatura value="+str(a0)+"\n"
-            r = requests.post(url, params=params, data=payload)
-            payload = "presion,place=presion value="+str(a1)+"\n"
-            r = requests.post(url, params=params, data=payload)
+#             payload = "temperatura,place=temperatura value="+str(a0)+"\n"
+#             r = requests.post(url, params=params, data=payload)
+#             payload = "presion,place=presion value="+str(a1)+"\n"
+#             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura P.atmosferica")
             critico+=1
-            time.sleep(1)
+            time.sleep(3)
         #LUZ DE LA PLANTA 
         try:
             b=luz()
-            payload = "luz,place=luz value="+str(b)+"\n"
-            r = requests.post(url, params=params, data=payload)
+#             payload = "luz,place=luz value="+str(b)+"\n"
+#             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de luz")
             critico+=1
-            time.sleep(1)       
+            time.sleep(3)       
         #GASES EN EL AMBIENTE DE LA PLANTA
         try:
             c=gas()
-            payload = "gas,place=gas value="+str(c)+"\n"
-            r = requests.post(url, params=params, data=payload)
+#             payload = "gas,place=gas value="+str(c)+"\n"
+#             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de gas")
             critico+=1
-            time.sleep(1)   
+            time.sleep(3)   
         #HUMEDAD
         try:
             d=hum()
-            payload = "Humedad,place=humedad value="+str(d)+"\n"
-            r = requests.post(url, params=params, data=payload)
+#             payload = "Humedad,place=humedad value="+str(d)+"\n"
+#             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de humedad")
             critico+=1
-            time.sleep(1)   
+            time.sleep(3)   
 
 def main():
     global bucle
