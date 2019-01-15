@@ -366,11 +366,11 @@ def pantalla():
     global a1
     global b
     global c
-
+    global bucle
     url = 'http://corlysis.com:8087/write'
     #url = 'https://corlysis.com:8086/write'
     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
-    while True:
+    while bucle:
         try:
             a0,a1=patmosferica()
             payload = "temperatura,place=temperatura value="+str(a0)+"\n"
@@ -402,6 +402,7 @@ def pantalla():
 
 
 def main():
+    global bucle
     start = time.time()  
     threads = list()
     thr = threading.Thread(target=pantalla)
@@ -517,12 +518,12 @@ def main():
                 time.sleep(2)
 
             
-    except KeyboardInterrupt:    
+    except KeyboardInterrupt:
+        bucle=False    
         thr.join()
-        thr._stop()
-        exit(0)
+        print("Proceso terminado")
 
-
+bucle=True
 warning=0
 critico=0       
 a0=0
