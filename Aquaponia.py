@@ -448,8 +448,6 @@ def main():
     thr = threading.Thread(target=pantalla)
     threads.append(thr)
     tr=0
-    buzzerCorto()
-    buzzerCorto()
     try:
         while True:
             
@@ -473,14 +471,15 @@ def main():
 #             r=0 #valor de humedad
             
             #SENSOR DE LUZ
-            s=350 #valor de luz
+            s=100 #valor de luz
             
             #SENSOR DE GAS (Hay que ver particulas)
             t=1 #valor de gas
             
             #SENSOR DE HUMEDAD
             u=100
-            
+            warning=0
+            critico=0
             
             end = time.time()
             diff=round(end-start)
@@ -492,7 +491,7 @@ def main():
 
 
             if diff%10==0 or diff%10==1 or diff%10==9:            
-                if a0>=p:
+                if round(a0)>=p:
                     True
                 else:
                     warning+=1
