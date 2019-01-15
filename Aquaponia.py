@@ -159,8 +159,6 @@ def buzzer(number):
 #P.atmosferica PROBADO OK
 def patmosferica(): 
     DEVICE = 0x77 # Default device I2C address
-    bmp = BMP085(0x77, 1)
-    
     bus = smbus.SMBus(1) # Rev 2 Pi, Pi 2 & Pi 3 uses bus 1; Rev 1 Pi uses bus 0
     
     def getShort(data, index):
@@ -300,8 +298,6 @@ def patmosferica():
     print ("Temperature : ", temperature, "C")
     print ("Pressure : ", pressure, "hPa")
     print ("Humidity : ", humidity, "%")
-    altitude = bmp.readAltitude(101560)
-    print("Altura : ", altitude," m")
     #Return los 3 valores en un array y luego procesarlos
     return temperature,pressure,humidity
     
@@ -592,18 +588,18 @@ def main():
                 setText("Error critico")
                 setRGB(255, 0, 0)
                 buzzer(6)
-                time.sleep(6)
+                time.sleep(4)
             elif warning>=3:
                 setRGB(199, 92, 52)
                 setText("Demasiadas alertas")
                 buzzer(4)
-                time.sleep(6)
+                time.sleep(4)
                 critico+=1
             elif warning == 2:
                 setText("Dos alertas, revisa el sistema")
                 setRGB(251, 150, 96)# Rosa
                 buzzer(3)
-                time.sleep(6)
+                time.sleep(4)
             elif warning == 1:
                 setText("Una alerta, revisa el sistema")
                 setRGB(254, 185, 58)# Amarillo
