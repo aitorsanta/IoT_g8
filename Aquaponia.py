@@ -304,11 +304,11 @@ def patmosferica():
 
     temperature,pressure,humidity = readBME280All()
     #ESTO
-    print ("Temperature : ", temperature, "C")
-    print ("Pressure : ", pressure, "hPa")
-    print ("Humidity : ", humidity, "%")
+    print ("Temperatura : ", temperature, "C")
+    print ("Presion : ", pressure, "hPa")
+#    print ("Humedad : ", humidity, "%")
     #Return los 3 valores en un array y luego procesarlos
-    return temperature,pressure,humidity
+    return temperature,pressure
     
             
 #Luz PROBADO OK
@@ -364,7 +364,6 @@ def pantalla():
     global warning
     global a0
     global a1
-    global a2
     global b
     global c
 
@@ -373,12 +372,10 @@ def pantalla():
     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
     while True:
         try:
-            a0,a1,a2=patmosferica()
+            a0,a1=patmosferica()
             payload = "temperatura,place=temperatura value="+str(a0)+"\n"
             r = requests.post(url, params=params, data=payload)
             payload = "presion,place=presion value="+str(a1)+"\n"
-            r = requests.post(url, params=params, data=payload)
-            payload = "humedad,place=humedadAmbiente value="+str(a2)+"\n"
             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura P.atmosferica")
@@ -468,15 +465,6 @@ def main():
                     warning+=1
                     buzzerCorto()
                     setText("Presion atmosferica inestable")
-                    setRGB(254, 185, 58)
-                    warning+=1
-                    time.sleep(2)
-                if a2>=r:
-                    True
-                else:
-                    warning+=1
-                    buzzerCorto()
-                    setText("Poca humedad")
                     setRGB(254, 185, 58)
                     warning+=1
                     time.sleep(2)
