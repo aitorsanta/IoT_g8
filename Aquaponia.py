@@ -498,7 +498,7 @@ def main():
                     True
                 else:
                     warning+=1
-                    buzzerCorto()
+                    #buzzerCorto()
                     setText("Temperatura baja")
                     print("Temperatura baja")
                     setRGB(254, 185, 58)
@@ -508,7 +508,7 @@ def main():
                     True
                 else:
                     warning+=1
-                    buzzerCorto()
+                    #buzzerCorto()
                     setText("Presion atmosferica inestable")
                     print("Presion baja")
                     setRGB(254, 185, 58)
@@ -519,7 +519,7 @@ def main():
                     True
                 else:
                     warning+=1
-                    buzzerCorto()
+                    #buzzerCorto()
                     setText("Falta de luz")
                     print("luz baja")
                     setRGB(254, 185, 58)
@@ -530,7 +530,7 @@ def main():
                     True
                 else:
                     warning+=1
-                    buzzerCorto()
+                    #buzzerCorto()
                     setText("Poco oxigeno")
                     print("oxigeno bajo")
                     setRGB(254, 185, 58)
@@ -541,7 +541,7 @@ def main():
                     True
                 else:
                     warning+=1
-                    buzzerCorto()
+                    #buzzerCorto()
                     setText("Poca humedad")
                     print("humedad baja")
                     setRGB(254, 185, 58)
@@ -553,22 +553,22 @@ def main():
                 #setRGB(255, 0, 0)
                 #buzzer()
                 #time.sleep(4)
-                print("Hemos llegado aqui")
+                #print("Hemos llegado aqui")
             elif warning>=3:
                 setRGB(199, 92, 52)
                 setText("Demasiadas alertas")
-                buzzerCorto()
+                #buzzerCorto()
                 time.sleep(4)
-                critico+=1
+                #critico+=1
             elif warning == 2:
                 setText("Dos alertas, revisa el sistema")
                 setRGB(251, 150, 96)# Rosa
-                buzzerCorto()
+                #buzzerCorto()
                 time.sleep(4)
             elif warning == 1:
                 setText("Una alerta, revisa el sistema")
                 setRGB(254, 185, 58)# Amarillo
-                buzzerCorto()
+                #buzzerCorto()
                 time.sleep(3)
             elif warning == 0:
                 setRGB(0, 255, 0)
