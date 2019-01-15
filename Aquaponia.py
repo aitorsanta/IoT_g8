@@ -550,7 +550,7 @@ def main():
             
             if critico >= 0:
                 #setText("Error critico")
-                #setRGB(255, 0, 0)
+                setRGB(255, 0, 0)
                 #buzzer()
                 #time.sleep(4)
                 #print("Hemos llegado aqui")
