@@ -145,17 +145,26 @@ def create_char(location, pattern):
 #         setText("Bye bye, this should wrap onto next line")
 
 #Buzzer PROBADO OK
-def buzzer(number):
+def buzzer():
     buzzer = Buzzer(16)
     cont=0
-    while cont<number:
+    while cont<6:
         buzzer.on()
         sleep(0.1)
         buzzer.off()
         sleep(0.1)
         cont+=1
         
-
+def buzzerCorto():
+    buzzer = Buzzer(16)
+    cont=0
+    while cont<2:
+        buzzer.on()
+        sleep(0.1)
+        buzzer.off()
+        sleep(0.1)
+        cont+=1
+        
 #P.atmosferica PROBADO OK
 def patmosferica(): 
     DEVICE = 0x77 # Default device I2C address
@@ -346,32 +355,6 @@ def gas():
     else:
         print("No hay gases toxicos")
         return 0
-#     except KeyboardInterrupt:
-#         print("El usuario ha forzado la detencion del script")
-#         GPIO.cleanup()
-    #Con keyboardinterrupt detectamos si el usuario pulsa CONTROL + C y si es asi 
-    #cerramos el script y "limpiamos" los pines GPIO con GPIO.cleanup()
-
-#Humedad
-# def humedad():
-#     channel = 1 #21
-#     GPIO.setmode(GPIO.BCM)
-#     GPIO.setup(channel, GPIO.IN)
-#     def callback(channel):
-#             if GPIO.input(channel):
-#                     print("No humedad")
-#                     return 0
-#             else:
-#                     print("Hay suficiente humedad")
-#                     return 1
-# 
-#     GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)  # let us know when the pin goes HIGH or LOW
-#     GPIO.add_event_callback(channel, callback)  # assign function to GPIO PIN, Run function on change
-#     
-# # infinite loop
-# #     while True:
-# #         time.sleep(1)
-
 
 
 #LCD
@@ -384,7 +367,7 @@ def pantalla():
     global a2
     global b
     global c
-#     global d
+
     url = 'http://corlysis.com:8087/write'
     #url = 'https://corlysis.com:8086/write'
     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
@@ -419,23 +402,6 @@ def pantalla():
             setText("Error lectura de gas")
             critico+=1
             time.sleep(1)   
-#         #HUMEDAD EN LAS RAICES
-#         try:
-#             d=humedad()
-#             print("EL VALOR DE D es=",d)
-#             if d==None:
-#                 print("No hay humedad (1)")
-#             else:
-#                 print("Hay humedad (1)")
-#             payload = "humedad,place=humedad value="+str(d)+"\n"
-#             r = requests.post(url, params=params, data=payload)
-#         except:
-#             setText("Error lectura de humedad")
-#             critico+=1
-#             time.sleep(1)    
-
-
-
 
 
 def main():
@@ -444,13 +410,10 @@ def main():
     thr = threading.Thread(target=pantalla)
     threads.append(thr)
     tr=0
-    buzzer(2)
-    buzzer(2)
-    buzzer(2)
+    buzzerCorto()
+    buzzerCorto()
     try:
         while True:
-            #buzzer() SERIA ACTUADOR        
-            #lcd() ACTUADOR
             
             #inicializar estos valores por si hay lectura errornea o lo que sea (pruebas)
     
@@ -458,6 +421,11 @@ def main():
             
             global warning
             global critico
+            global a0
+            global a1
+            global a2
+            global b
+            global c
             
             #VALORES ADECUADOS
             
@@ -472,53 +440,24 @@ def main():
             #SENSOR DE GAS (Hay que ver particulas)
             t=1 #valor de gas
             
-            #SENSOR TEMPERATURA RAICES/TIERRA
-#             u=1 #valor de humedad
             
             
             
             end = time.time()
             diff=round(end-start)
-    #       print(round(end - start))
             
             if tr==0:
                 thr.start()
                 tr=1
-            #ESTO SERIA EL CODIGO DEL HILO
-    #         try:
-    #             a=patmosferica()
-    #         except:
-    #             setText("Error lectura P.atmosferica")
-    #             critico+=1
-    #             time.sleep(1)
-    #         #LUZ DE LA PLANTA 
-    #         try:
-    #             b=luz()
-    #         except:
-    #             setText("Error lectura de luz")
-    #             critico+=1
-    #             time.sleep(1)       
-    #         #GASES EN EL AMBIENTE DE LA PLANTA
-    #         try:
-    #             c=gas()
-    #         except:
-    #             setText("Error lectura de gas")
-    #             critico+=1
-    #             time.sleep(1)   
-    #         #HUMEDAD EN LAS RAICES
-    #         try:
-    #             d=humedad()
-    #         except:
-    #             setText("Error lectura de humedad")
-    #             critico+=1
-    #             time.sleep(1)              
-            #Habria que ver como funcionan estas condiciones
+
+
+
             if diff%10==0 or diff%10==1 or diff%10==9:            
                 if a0>=p:
                     True
                 else:
                     warning+=1
-                    buzzer(2)
+                    buzzerCorto()
                     setText("Temperatura baja")
                     setRGB(254, 185, 58)
                     warning+=1
@@ -527,7 +466,7 @@ def main():
                     True
                 else:
                     warning+=1
-                    buzzer(2)
+                    buzzerCorto()
                     setText("Presion atmosferica inestable")
                     setRGB(254, 185, 58)
                     warning+=1
@@ -536,7 +475,7 @@ def main():
                     True
                 else:
                     warning+=1
-                    buzzer(2)
+                    buzzerCorto()
                     setText("Poca humedad")
                     setRGB(254, 185, 58)
                     warning+=1
@@ -546,7 +485,7 @@ def main():
                     True
                 else:
                     warning+=1
-                    buzzer(2)
+                    buzzerCorto()
                     setText("Falta de luz")
                     setRGB(254, 185, 58)
                     warning+=1
@@ -556,76 +495,45 @@ def main():
                     True
                 else:
                     warning+=1
-                    buzzer(2)
+                    buzzerCorto()
                     setText("Poco oxigeno")
                     setRGB(254, 185, 58)
                     warning+=1
                     time.sleep(2)
-            #HUMEDAD EN LAS RAICES
-#                 if d==u:
-#                     True
-#                 else:
-#                     warning+=1
-#                     buzzer(2)
-#                     setText("Raices secas")
-#                     setRGB(254, 185, 58)
-#                     warning+=1
-#                     time.sleep(2)
-    
-     
-    
-            #
-            #Si un sensor no esta conectado (lo de gpio read o eso que tenga valor 0) que ensene un error critico y buzeer para saber si funciona bien todo
-            #
-            #SISTEMA DE VALORES
-            #
-            #Bien
-            #Warning
-            #Critico
-            #
-            #Cada warning que haya oscurecera el color del lcd, tres warnings indicarian un error critico, por cada warning una alerta sonora corta
-            #
-                   
-            
+
             
             if critico >= 0:
                 setText("Error critico")
                 setRGB(255, 0, 0)
-                buzzer(6)
+                buzzer()
                 time.sleep(4)
             elif warning>=3:
                 setRGB(199, 92, 52)
                 setText("Demasiadas alertas")
-                buzzer(4)
+                buzzerCorto()
                 time.sleep(4)
                 critico+=1
             elif warning == 2:
                 setText("Dos alertas, revisa el sistema")
                 setRGB(251, 150, 96)# Rosa
-                buzzer(3)
+                buzzerCorto()
                 time.sleep(4)
             elif warning == 1:
                 setText("Una alerta, revisa el sistema")
                 setRGB(254, 185, 58)# Amarillo
-                buzzer(2)
+                buzzerCorto()
                 time.sleep(3)
             elif warning == 0:
                 setRGB(0, 255, 0)
                 setText("Funcionamiento correctamente")
                 time.sleep(2)
-            
-            #         setText("Hello world, this is a test")
-            #         setRGB(0,128,64)
+
             
     except KeyboardInterrupt:    
         thr.join()
         thr._stop()
         exit(0)
 
-# start = time.time()
-# print("hello")
-# end = time.time()
-# print(end - start)
 
 warning=0
 critico=0       
@@ -634,7 +542,7 @@ a1=0
 a2=0
 b=0
 c=0
-# d=0
+
 try:
     main()
 except:
