@@ -383,7 +383,7 @@ def ReadChannel(channel):
 def hum():
     soilOne = ReadChannel(1)
     # Output
-    print("Soil1=",soilOne)
+    print("Humedad=",soilOne)
     return soilOne
     
 
@@ -481,7 +481,7 @@ def main():
             t=1 #valor de gas
             
             #SENSOR DE HUMEDAD
-            u=100
+            u=700
             warning=0
             critico=0
             
