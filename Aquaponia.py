@@ -301,7 +301,7 @@ def patmosferica():
     print ("Pressure : ", pressure, "hPa")
     print ("Humidity : ", humidity, "%")
     altitude = bmp.readAltitude(101560)
-    print("Altura : "altitude," m")
+    print("Altura : ", altitude," m")
     #Return los 3 valores en un array y luego procesarlos
     return temperature,pressure,humidity
     
