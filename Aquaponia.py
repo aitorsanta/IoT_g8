@@ -388,17 +388,23 @@ def humedad():
 def pantalla():
     global critico
     global warning
+    global a0
+    global a1
+    global a2
+    global b
+    global c
+    global d
     url = 'http://corlysis.com:8087/write'
     #url = 'https://corlysis.com:8086/write'
     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
     while True:
         try:
             a0,a1,a2=patmosferica()
-            payload = "meas_test,place=temperatura value="+a0+"\n"
+            payload = "temperatura,place=temperatura value="+str(a0)+"\n"
             r = requests.post(url, params=params, data=payload)
-            payload = "meas_test,place=presion value="+a1+"\n"
+            payload = "presion,place=presion value="+str(a1)+"\n"
             r = requests.post(url, params=params, data=payload)
-            payload = "meas_test,place=humedadAmbiente value="+a2+"\n"
+            payload = "humedad,place=humedadAmbiente value="+str(a2)+"\n"
             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura P.atmosferica")
@@ -407,7 +413,7 @@ def pantalla():
         #LUZ DE LA PLANTA 
         try:
             b=luz()
-            payload = "meas_test,place=luz value="+b+"\n"
+            payload = "luz,place=luz value="+str(b)+"\n"
             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de luz")
@@ -416,7 +422,7 @@ def pantalla():
         #GASES EN EL AMBIENTE DE LA PLANTA
         try:
             c=gas()
-            payload = "meas_test,place=gas value="+c+"\n"
+            payload = "gas,place=gas value="+str(c)+"\n"
             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de gas")
@@ -430,7 +436,7 @@ def pantalla():
                 print("No hay humedad (1)")
             else:
                 print("Hay humedad (1)")
-            payload = "meas_test,place=humedad value="+d+"\n"
+            payload = "humedad,place=humedad value="+str(d)+"\n"
             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de humedad")
