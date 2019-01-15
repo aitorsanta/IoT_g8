@@ -353,7 +353,7 @@ def gas():
         return 1
     # Seguimos a la espera de otra senal por parte del sensor MQ-135
     else:
-        print("No hay gases toxicos")
+        print("('No hay gases toxicos')")
         return 0
 
 
@@ -438,6 +438,7 @@ def pantalla():
             d=hum()
 #             payload = "Humedad,place=humedad value="+str(d)+"\n"
 #             r = requests.post(url, params=params, data=payload)
+            print("##################################")
         except:
             setText("Error lectura de humedad")
             print("Error de lectura de humedad")
