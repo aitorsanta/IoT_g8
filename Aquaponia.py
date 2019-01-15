@@ -357,6 +357,37 @@ def gas():
         return 0
 
 
+
+#!/usr/bin/python
+ 
+
+# Monitor two soil sensors on MCP3008, ch 2 and 3 
+# (pin 3 and 4)
+
+import spidev
+import time
+import os
+
+# Open SPI bus
+spi = spidev.SpiDev()
+spi.open(0,0)
+
+# Function to read SPI data from MCP3008 chip
+def ReadChannel(channel):
+    adc = spi.xfer2([1,(8+channel)<<4,0])
+    data = ((adc[1]&3) << 8) + adc[2]
+    return data
+
+
+# Main loop - read raw data and display
+def hum():
+    soilOne = ReadChannel(1)
+    # Output
+    print("Soil1=",soilOne)
+    
+    
+
+
 #LCD
 
 def pantalla():
@@ -366,6 +397,7 @@ def pantalla():
     global a1
     global b
     global c
+    global d
     global bucle
     url = 'http://corlysis.com:8087/write'
     #url = 'https://corlysis.com:8086/write'
@@ -399,7 +431,15 @@ def pantalla():
             setText("Error lectura de gas")
             critico+=1
             time.sleep(1)   
-
+        #HUMEDAD
+        try:
+            d=hum()
+            payload = "Humedad,place=humedad value="+str(d)+"\n"
+            r = requests.post(url, params=params, data=payload)
+        except:
+            setText("Error lectura de humedad")
+            critico+=1
+            time.sleep(1)   
 
 def main():
     global bucle
@@ -424,7 +464,7 @@ def main():
             global a2
             global b
             global c
-            
+            global d
             #VALORES ADECUADOS
             
             #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
@@ -438,7 +478,8 @@ def main():
             #SENSOR DE GAS (Hay que ver particulas)
             t=1 #valor de gas
             
-            
+            #SENSOR DE HUMEDAD
+            u=100
             
             
             end = time.time()
@@ -480,7 +521,7 @@ def main():
                     warning+=1
                     time.sleep(2)
             #GASES EN EL AMBIENTE DE LA PLANTA
-                if c>=t:
+                if c<t:
                     True
                 else:
                     warning+=1
@@ -489,7 +530,16 @@ def main():
                     setRGB(254, 185, 58)
                     warning+=1
                     time.sleep(2)
-
+            #HUMEDAD DE LA PLANTA
+                if d>u:
+                    True
+                else:
+                    warning+=1
+                    buzzerCorto()
+                    setText("Poca humedad")
+                    setRGB(254, 185, 58)
+                    warning+=1
+                    time.sleep(2)
             
             if critico >= 0:
                 setText("Error critico")
@@ -514,14 +564,16 @@ def main():
                 time.sleep(3)
             elif warning == 0:
                 setRGB(0, 255, 0)
-                setText("Funcionamiento correctamente")
+                setText("Funcionamiento correcto")
                 time.sleep(2)
 
             
     except KeyboardInterrupt:
+        setRGB(0, 0, 0)
         bucle=False    
         thr.join()
         print("Proceso terminado")
+        
 
 bucle=True
 warning=0
@@ -531,7 +583,7 @@ a1=0
 a2=0
 b=0
 c=0
-
+d=0
 try:
     main()
 except:
