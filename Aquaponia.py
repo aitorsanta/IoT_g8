@@ -341,9 +341,11 @@ def gas():
         GPIO.output(7, False) #Enviamos la senal de activacion al buzzer pin 7 HIGH
         time.sleep(5) #La senal (pitido) dura 5 segundos
         GPIO.output(7,True) #Cerramos la senal poniendo el pin 7 en LOW y el buzzer se calla.
+        return 1
     # Seguimos a la espera de otra senal por parte del sensor MQ-135
     else:
         print("No hay gases toxicos")
+        return 0
 #     except KeyboardInterrupt:
 #         print("El usuario ha forzado la detencion del script")
 #         GPIO.cleanup()
@@ -351,24 +353,24 @@ def gas():
     #cerramos el script y "limpiamos" los pines GPIO con GPIO.cleanup()
 
 #Humedad
-def humedad():
-    channel = 1 #21
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(channel, GPIO.IN)
-    def callback(channel):
-            if GPIO.input(channel):
-                    print("No humedad")
-                    return 0
-            else:
-                    print("Hay suficiente humedad")
-                    return 1
-
-    GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)  # let us know when the pin goes HIGH or LOW
-    GPIO.add_event_callback(channel, callback)  # assign function to GPIO PIN, Run function on change
-    
-    # infinite loop
-#     while True:
-#         time.sleep(1)
+# def humedad():
+#     channel = 1 #21
+#     GPIO.setmode(GPIO.BCM)
+#     GPIO.setup(channel, GPIO.IN)
+#     def callback(channel):
+#             if GPIO.input(channel):
+#                     print("No humedad")
+#                     return 0
+#             else:
+#                     print("Hay suficiente humedad")
+#                     return 1
+# 
+#     GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)  # let us know when the pin goes HIGH or LOW
+#     GPIO.add_event_callback(channel, callback)  # assign function to GPIO PIN, Run function on change
+#     
+# # infinite loop
+# #     while True:
+# #         time.sleep(1)
 
 
 
@@ -382,7 +384,7 @@ def pantalla():
     global a2
     global b
     global c
-    global d
+#     global d
     url = 'http://corlysis.com:8087/write'
     #url = 'https://corlysis.com:8086/write'
     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
@@ -417,20 +419,20 @@ def pantalla():
             setText("Error lectura de gas")
             critico+=1
             time.sleep(1)   
-        #HUMEDAD EN LAS RAICES
-        try:
-            d=humedad()
-            print("EL VALOR DE D es=",d)
-            if d==None:
-                print("No hay humedad (1)")
-            else:
-                print("Hay humedad (1)")
-            payload = "humedad,place=humedad value="+str(d)+"\n"
-            r = requests.post(url, params=params, data=payload)
-        except:
-            setText("Error lectura de humedad")
-            critico+=1
-            time.sleep(1)    
+#         #HUMEDAD EN LAS RAICES
+#         try:
+#             d=humedad()
+#             print("EL VALOR DE D es=",d)
+#             if d==None:
+#                 print("No hay humedad (1)")
+#             else:
+#                 print("Hay humedad (1)")
+#             payload = "humedad,place=humedad value="+str(d)+"\n"
+#             r = requests.post(url, params=params, data=payload)
+#         except:
+#             setText("Error lectura de humedad")
+#             critico+=1
+#             time.sleep(1)    
 
 
 
@@ -442,7 +444,9 @@ def main():
     thr = threading.Thread(target=pantalla)
     threads.append(thr)
     tr=0
-    
+    buzzer(2)
+    buzzer(2)
+    buzzer(2)
     try:
         while True:
             #buzzer() SERIA ACTUADOR        
@@ -458,18 +462,18 @@ def main():
             #VALORES ADECUADOS
             
             #SENSOR DE TEMPERATURA/PRESION/HUMEDAD AMBIENTE
-            p=0 #valor de temperatura
-            q=0 #valor de presion
-            r=0 #valor de humedad
+            p=16 #valor de temperatura
+            q=1.021 #valor de presion
+#             r=0 #valor de humedad
             
             #SENSOR DE LUZ
-            s=0 #valor de luz
+            s=350 #valor de luz
             
             #SENSOR DE GAS (Hay que ver particulas)
-            t=0 #valor de gas
+            t=1 #valor de gas
             
             #SENSOR TEMPERATURA RAICES/TIERRA
-            u=1 #valor de humedad
+#             u=1 #valor de humedad
             
             
             
@@ -558,15 +562,15 @@ def main():
                     warning+=1
                     time.sleep(2)
             #HUMEDAD EN LAS RAICES
-                if d==u:
-                    True
-                else:
-                    warning+=1
-                    buzzer(2)
-                    setText("Raices secas")
-                    setRGB(254, 185, 58)
-                    warning+=1
-                    time.sleep(2)
+#                 if d==u:
+#                     True
+#                 else:
+#                     warning+=1
+#                     buzzer(2)
+#                     setText("Raices secas")
+#                     setRGB(254, 185, 58)
+#                     warning+=1
+#                     time.sleep(2)
     
      
     
@@ -630,7 +634,7 @@ a1=0
 a2=0
 b=0
 c=0
-d=0
+# d=0
 try:
     main()
 except:
