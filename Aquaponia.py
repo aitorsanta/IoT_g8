@@ -545,13 +545,14 @@ def main():
                     time.sleep(2)
             
             if critico >= 0:
-                #setText("Error critico")
+                setText("Error critico")
                 setRGB(255, 0, 0)
                 #buzzer()
                 #time.sleep(4)
                 #print("Hemos llegado aqui")
             elif warning>=3:
-                setRGB(199, 92, 52)
+                #setRGB(199, 92, 52)
+                setRGB(0, 0, 255)
                 setText("Demasiadas alertas")
                 #buzzerCorto()
                 time.sleep(4)
