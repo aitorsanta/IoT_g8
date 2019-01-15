@@ -410,6 +410,7 @@ def pantalla():
 #             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura P.atmosferica")
+            print("Error de lectura de P.atmosferica")
             critico+=1
             time.sleep(3)
         #LUZ DE LA PLANTA 
@@ -419,6 +420,7 @@ def pantalla():
 #             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de luz")
+            print("Error de lectura de luz")
             critico+=1
             time.sleep(3)       
         #GASES EN EL AMBIENTE DE LA PLANTA
@@ -428,6 +430,7 @@ def pantalla():
 #             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de gas")
+            print("Error de lectura de gas")
             critico+=1
             time.sleep(3)   
         #HUMEDAD
@@ -437,6 +440,7 @@ def pantalla():
 #             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de humedad")
+            print("Error de lectura de humedad")
             critico+=1
             time.sleep(3)   
 
@@ -496,6 +500,7 @@ def main():
                     warning+=1
                     buzzerCorto()
                     setText("Temperatura baja")
+                    print("Temperatura baja")
                     setRGB(254, 185, 58)
                     warning+=1
                     time.sleep(2)
@@ -505,6 +510,7 @@ def main():
                     warning+=1
                     buzzerCorto()
                     setText("Presion atmosferica inestable")
+                    print("Presion baja")
                     setRGB(254, 185, 58)
                     warning+=1
                     time.sleep(2)
@@ -515,6 +521,7 @@ def main():
                     warning+=1
                     buzzerCorto()
                     setText("Falta de luz")
+                    print("luz baja")
                     setRGB(254, 185, 58)
                     warning+=1
                     time.sleep(2)
@@ -525,6 +532,7 @@ def main():
                     warning+=1
                     buzzerCorto()
                     setText("Poco oxigeno")
+                    print("oxigeno bajo")
                     setRGB(254, 185, 58)
                     warning+=1
                     time.sleep(2)
@@ -535,15 +543,17 @@ def main():
                     warning+=1
                     buzzerCorto()
                     setText("Poca humedad")
+                    print("humedad baja")
                     setRGB(254, 185, 58)
                     warning+=1
                     time.sleep(2)
             
             if critico >= 0:
-                setText("Error critico")
-                setRGB(255, 0, 0)
-                buzzer()
-                time.sleep(4)
+                #setText("Error critico")
+                #setRGB(255, 0, 0)
+                #buzzer()
+                #time.sleep(4)
+                print("Hemos llegado aqui")
             elif warning>=3:
                 setRGB(199, 92, 52)
                 setText("Demasiadas alertas")
