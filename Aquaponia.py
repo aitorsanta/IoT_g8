@@ -484,7 +484,7 @@ def main():
                 thr.start()
                 tr=1
 
-            if diff%10==0 or diff%10==1 or diff%10==9:            
+            if diff%4==0 or diff%4==1 or diff%4==3:            
                 if round(a0)>=p:
                     True
                 else:
