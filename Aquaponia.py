@@ -29,8 +29,6 @@ import signal
 import sys
 
 
-
-
 #Imports Gas
 import RPi.GPIO as GPIO #Importamos la libreria GPIO
 import time #Usaremos timer.sleep asi que hay que importar time
@@ -48,8 +46,6 @@ import threading
 
 #Corlysis
 import requests
-
-
 
 
 #ESTOS SON LOS QUE HABRIA QUE ASIGNAR A LOS VALORES GLOBALES
@@ -356,16 +352,10 @@ def gas():
         print("('No hay gases toxicos')")
         return 0
 
-
-
-#!/usr/bin/python
  
-
 # Monitor two soil sensors on MCP3008, ch 2 and 3 
 # (pin 3 and 4)
 
-import spidev
-import time
 import os
 
 # Open SPI bus
@@ -386,8 +376,6 @@ def hum():
     print("Humedad=",soilOne)
     return soilOne
     
-
-
 #LCD
 
 def pantalla():
@@ -410,7 +398,6 @@ def pantalla():
 #             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura P.atmosferica")
-            print("Error de lectura de P.atmosferica")
             critico+=1
             time.sleep(3)
         #LUZ DE LA PLANTA 
@@ -420,7 +407,6 @@ def pantalla():
 #             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de luz")
-            print("Error de lectura de luz")
             critico+=1
             time.sleep(3)       
         #GASES EN EL AMBIENTE DE LA PLANTA
@@ -430,7 +416,6 @@ def pantalla():
 #             r = requests.post(url, params=params, data=payload)
         except:
             setText("Error lectura de gas")
-            print("Error de lectura de gas")
             critico+=1
             time.sleep(3)   
         #HUMEDAD
@@ -441,7 +426,6 @@ def pantalla():
             print("##################################")
         except:
             setText("Error lectura de humedad")
-            print("Error de lectura de humedad")
             critico+=1
             time.sleep(3)   
 
@@ -492,25 +476,21 @@ def main():
                 thr.start()
                 tr=1
 
-
-
             if diff%10==0 or diff%10==1 or diff%10==9:            
                 if round(a0)>=p:
                     True
                 else:
                     warning+=1
-                    #buzzerCorto()
+                    buzzerCorto()
                     setText("Temperatura baja")
-                    print("Temperatura baja")
                     setRGB(254, 185, 58)
                     time.sleep(2)
                 if a1>=q:
                     True
                 else:
                     warning+=1
-                    #buzzerCorto()
+                    buzzerCorto()
                     setText("Presion atmosferica inestable")
-                    print("Presion baja")
                     setRGB(254, 185, 58)
                     time.sleep(2)
             #LUZ DE LA PLANTA
@@ -518,9 +498,8 @@ def main():
                     True
                 else:
                     warning+=1
-                    #buzzerCorto()
+                    buzzerCorto()
                     setText("Falta de luz")
-                    print("luz baja")
                     setRGB(254, 185, 58)
                     time.sleep(2)
             #GASES EN EL AMBIENTE DE LA PLANTA
@@ -528,9 +507,8 @@ def main():
                     True
                 else:
                     warning+=1
-                    #buzzerCorto()
+                    buzzerCorto()
                     setText("Poco oxigeno")
-                    print("oxigeno bajo")
                     setRGB(254, 185, 58)
                     time.sleep(2)
             #HUMEDAD DE LA PLANTA
@@ -538,34 +516,32 @@ def main():
                     True
                 else:
                     warning+=1
-                    #buzzerCorto()
+                    buzzerCorto()
                     setText("Poca humedad")
-                    print("humedad baja")
                     setRGB(254, 185, 58)
                     time.sleep(2)
             
             if critico > 0:
                 setText("Error critico")
-                setRGB(0, 0, 255)
-                #buzzer()
-                #time.sleep(4)
+                setRGB(255, 0, 0)
+                buzzer()
+                time.sleep(4)
                 #print("Hemos llegado aqui")
             elif warning>=3:
-                #setRGB(199, 92, 52)
-                setRGB(0, 255, 255)
+                setRGB(199, 92, 52)
                 setText("Demasiadas alertas")
-                #buzzerCorto()
+                buzzerCorto()
                 time.sleep(4)
                 #critico+=1
             elif warning == 2:
                 setText("Dos alertas, revisa el sistema")
                 setRGB(251, 150, 96)# Rosa
-                #buzzerCorto()
+                buzzerCorto()
                 time.sleep(4)
             elif warning == 1:
                 setText("Una alerta, revisa el sistema")
-                setRGB(254, 185, 58)# Amarillo
-                #buzzerCorto()
+                setRGB(255, 255, 0)# Amarillo
+                buzzerCorto()
                 time.sleep(3)
             elif warning == 0:
                 setRGB(0, 255, 0)
@@ -575,6 +551,7 @@ def main():
             
     except KeyboardInterrupt:
         setRGB(0, 0, 0)
+        setText("")
         bucle=False    
         thr.join()
         print("Proceso terminado")
