@@ -473,7 +473,7 @@ def main():
             t=1 #valor de gas
             
             #SENSOR DE HUMEDAD
-            u=700
+            u=120
             warning=0
             critico=0
             
@@ -520,7 +520,7 @@ def main():
                     setRGB(254, 185, 58)
                     time.sleep(2)
             #HUMEDAD DE LA PLANTA
-                if d>u:
+                if d<u:
                     True
                 else:
                     warning+=1
