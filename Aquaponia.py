@@ -392,6 +392,7 @@ def pantalla():
     while bucle:
         try:
             a0,a1=patmosferica()
+            time.sleep(1)
 #             payload = "temperatura,place=temperatura value="+str(a0)+"\n"
 #             r = requests.post(url, params=params, data=payload)
 #             payload = "presion,place=presion value="+str(a1)+"\n"
@@ -404,6 +405,7 @@ def pantalla():
         #LUZ DE LA PLANTA 
         try:
             b=luz()
+            time.sleep(1)
 #             payload = "luz,place=luz value="+str(b)+"\n"
 #             r = requests.post(url, params=params, data=payload)
         except Exception as ex:
@@ -414,6 +416,7 @@ def pantalla():
         #GASES EN EL AMBIENTE DE LA PLANTA
         try:
             c=gas()
+            time.sleep(1)
 #             payload = "gas,place=gas value="+str(c)+"\n"
 #             r = requests.post(url, params=params, data=payload)
         except Exception as ex:
@@ -424,6 +427,7 @@ def pantalla():
         #HUMEDAD
         try:
             d=hum()
+            time.sleep(1)
 #             payload = "Humedad,place=humedad value="+str(d)+"\n"
 #             r = requests.post(url, params=params, data=payload)
             print("##################################")
@@ -543,7 +547,7 @@ def main():
                 buzzerCorto()
                 time.sleep(4)
             elif warning == 1:
-                setText("Una alerta, revisa el sistema")
+                setText("Una alerta, revise el sistema")
                 setRGB(255, 255, 0)# Amarillo
                 buzzerCorto()
                 time.sleep(3)
