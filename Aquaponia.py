@@ -311,7 +311,7 @@ def patmosferica():
 #Luz PROBADO OK
 def luz():
     ldr = LightSensor(12)
-    print ("('Nivel de luz=",ldr.value,"')")
+    print ("Nivel de luz: ",ldr.value)
     return ldr.value
 
 
