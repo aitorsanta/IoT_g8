@@ -467,7 +467,7 @@ def main():
 #             r=0 #valor de humedad
             
             #SENSOR DE LUZ
-            s=100 #valor de luz
+            s=150 #valor de luz
             
             #SENSOR DE GAS (Hay que ver particulas)
             t=1 #valor de gas
