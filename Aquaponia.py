@@ -17,7 +17,7 @@ from ctypes import c_ubyte
 import spidev # To communicate with SPI devices
 from time import sleep  
 from sys import argv, exit
-from gpizero import LightSensor
+from gpiozero import LightSensor
 #
 
 # Imports Humedad
