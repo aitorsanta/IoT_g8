@@ -396,7 +396,8 @@ def pantalla():
 #             r = requests.post(url, params=params, data=payload)
 #             payload = "presion,place=presion value="+str(a1)+"\n"
 #             r = requests.post(url, params=params, data=payload)
-        except:
+        except Exception as ex:
+            print (ex)
             setText("Error lectura P.atmosferica")
             critico+=1
             time.sleep(3)
@@ -405,7 +406,8 @@ def pantalla():
             b=luz()
 #             payload = "luz,place=luz value="+str(b)+"\n"
 #             r = requests.post(url, params=params, data=payload)
-        except:
+        except Exception as ex:
+            print (ex)
             setText("Error lectura de luz")
             critico+=1
             time.sleep(3)       
@@ -414,7 +416,8 @@ def pantalla():
             c=gas()
 #             payload = "gas,place=gas value="+str(c)+"\n"
 #             r = requests.post(url, params=params, data=payload)
-        except:
+        except Exception as ex:
+            print (ex)
             setText("Error lectura de gas")
             critico+=1
             time.sleep(3)   
@@ -424,7 +427,8 @@ def pantalla():
 #             payload = "Humedad,place=humedad value="+str(d)+"\n"
 #             r = requests.post(url, params=params, data=payload)
             print("##################################")
-        except:
+        except Exception as ex:
+            print (ex)
             setText("Error lectura de humedad")
             critico+=1
             time.sleep(3)   
