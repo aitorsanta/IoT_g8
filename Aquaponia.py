@@ -559,6 +559,9 @@ def main():
         bucle=False    
         thr.join()
         print("Proceso terminado")
+
+    except IOError:
+        setText("")
         
 
 bucle=True
