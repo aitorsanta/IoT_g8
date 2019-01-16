@@ -502,7 +502,7 @@ def main():
                     setRGB(254, 185, 58)
                     time.sleep(2)
             #LUZ DE LA PLANTA
-                if b>=s:
+                if b<=s:
                     True
                 else:
                     warning+=1
