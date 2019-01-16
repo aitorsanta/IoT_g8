@@ -311,7 +311,8 @@ def patmosferica():
 #Luz PROBADO OK
 def luz():
     ldr = LightSensor(12)
-    return ldr.value*100
+    print ("('Nivel de luz=",ldr.value,"')")
+    return ldr.value
 
 
 # Start SPI connection
@@ -472,7 +473,7 @@ def main():
 #             r=0 #valor de humedad
             
             #SENSOR DE LUZ
-            s=200 #valor de luz
+            s=0.3 #valor de luz
             
             #SENSOR DE GAS (Hay que ver particulas)
             t=1 #valor de gas
