@@ -17,6 +17,7 @@ from ctypes import c_ubyte
 import spidev # To communicate with SPI devices
 from time import sleep  
 from sys import argv, exit
+from gpizero import LightSensor
 #
 
 # Imports Humedad
@@ -309,27 +310,31 @@ def patmosferica():
             
 #Luz PROBADO OK
 def luz():
-# Start SPI connection
-    spi = spidev.SpiDev()
-    spi.open(0,0)   
+    ldr = LightSensor(12)
+    return ldr.value*100
 
-    # Read MCP3008 data
-    def analogInput(channel):
-        if ((channel > 7) or (channel < 0)):
-            return -1
-        spi.max_speed_hz = 1350000
-        adc = spi.xfer2([1,(8+channel)<<4,0])
-        data = ((adc[1]&3) << 8) + adc[2]
-        return data
+
+# Start SPI connection
+    # spi = spidev.SpiDev()
+    # spi.open(0,0)   
+
+    # # Read MCP3008 data
+    # def analogInput(channel):
+    #     if ((channel > 7) or (channel < 0)):
+    #         return -1
+    #     spi.max_speed_hz = 1350000
+    #     adc = spi.xfer2([1,(8+channel)<<4,0])
+    #     data = ((adc[1]&3) << 8) + adc[2]
+    #     return data
     
-    try:
-        #output = analogInput(int(argv[1]))
-        output = analogInput(int(2)) # Reading from CH0
-        print("Nivel de luz : ",output)
-        return output
-    except IndexError:
-        print("No se ha podido leer el nivel de luz")
-        #exit(0)
+    # try:
+    #     #output = analogInput(int(argv[1]))
+    #     output = analogInput(int(2)) # Reading from CH0
+    #     print("Nivel de luz : ",output)
+    #     return output
+    # except IndexError:
+    #     print("No se ha podido leer el nivel de luz")
+    #     #exit(0)
 
 
 
@@ -467,7 +472,7 @@ def main():
 #             r=0 #valor de humedad
             
             #SENSOR DE LUZ
-            s=100 #valor de luz
+            s=200 #valor de luz
             
             #SENSOR DE GAS (Hay que ver particulas)
             t=1 #valor de gas
