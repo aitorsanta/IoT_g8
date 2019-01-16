@@ -393,16 +393,16 @@ def pantalla():
     global c
     global d
     global bucle
-#     url = 'http://corlysis.com:8087/write'
-#     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
+     url = 'http://corlysis.com:8087/write'
+     params = {"db":"raspi8", "u":"token", "p":"d1a6c736ff5e9272d171f25ed60bf9b0"}
     while bucle:
         try:
             a0,a1=patmosferica()
             time.sleep(1)
-#             payload = "temperatura,place=temperatura value="+str(a0)+"\n"
-#             r = requests.post(url, params=params, data=payload)
-#             payload = "presion,place=presion value="+str(a1)+"\n"
-#             r = requests.post(url, params=params, data=payload)
+             payload = "temperatura,place=temperatura value="+str(a0)+"\n"
+             r = requests.post(url, params=params, data=payload)
+             payload = "presion,place=presion value="+str(a1)+"\n"
+             r = requests.post(url, params=params, data=payload)
         except Exception as ex:
             print (ex)
             setText("Error lectura P.atmosferica")
@@ -412,8 +412,8 @@ def pantalla():
         try:
             b=luz()
             time.sleep(1)
-#             payload = "luz,place=luz value="+str(b)+"\n"
-#             r = requests.post(url, params=params, data=payload)
+             payload = "luz,place=luz value="+str(b)+"\n"
+             r = requests.post(url, params=params, data=payload)
         except Exception as ex:
             print (ex)
             setText("Error lectura de luz")
@@ -423,8 +423,8 @@ def pantalla():
         try:
             c=gas()
             time.sleep(1)
-#             payload = "gas,place=gas value="+str(c)+"\n"
-#             r = requests.post(url, params=params, data=payload)
+             payload = "gas,place=gas value="+str(c)+"\n"
+             r = requests.post(url, params=params, data=payload)
         except Exception as ex:
             print (ex)
             setText("Error lectura de gas")
@@ -434,8 +434,8 @@ def pantalla():
         try:
             d=hum()
             time.sleep(1)
-#             payload = "Humedad,place=humedad value="+str(d)+"\n"
-#             r = requests.post(url, params=params, data=payload)
+             payload = "Humedad,place=humedad value="+str(d)+"\n"
+             r = requests.post(url, params=params, data=payload)
             print("##################################")
         except Exception as ex:
             print (ex)
